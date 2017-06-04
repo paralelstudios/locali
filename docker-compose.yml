@@ -1,0 +1,24 @@
+backend:
+  restart: always
+  build: .
+  ports:
+    - "80:80"
+  links:
+    - postgres:postgres
+    - rabbitmq:rabbitmq
+
+postgres:
+  restart: always
+  image: postgres:latest
+  env_file: db.env.secrets
+  volumes_from:
+    - data
+  ports:
+    - "5432:5432"
+
+
+data:
+  image: postgres:latest
+  command: "true"
+  volumes:
+    - /var/lib/postgresql

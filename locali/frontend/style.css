@@ -46,11 +46,14 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+button {
+    border: none;
+}
 
-#container {
-    background-color: #3D9970;
+main {
+    background-color: #C8E6C9;
     display: grid;
-    grid-template-rows: 10vh 73vh 16vh;
+    grid-template-rows: 10vh 86vh; /*73vh 16vh;*/
     height: 100vh;
 
 }
@@ -60,7 +63,8 @@ header {
     grid-row: 1;
     width: 100%;
     text-align: center;
-    background-color: #2ECC40;
+    background-color: #4CAF50;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, .26);
 }
 
 #logo {
@@ -69,42 +73,58 @@ header {
     color: #FFFFFF;
     text-decoration: none;
     font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
-
 }
 
+#quiz {
+    grid-row: 2;
+    display: grid;
+    grid-template-rows: 85% 19%;
+}
 
 #entity {
-    grid-row: 2;
+    grid-row: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 #entity img {
-    min-height: 69vh;
-    height: auto;
+    height: 69vh;
+    max-width: 95vw;
+    border-radius: 5px;
 }
 .blurred {
     filter: blur(10xpx);
 }
 
 .choice {
-    border: thick solid #111111;
     border-radius: 10px;
     font-size: 3vh;
     margin: .5vh;
     text-align: center;
-    background-color: #DDDDDD;
+    background-color: #43A047;
     font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
-    display: flex;
+    Display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0px 0px 15px -5px black;
+    color: white;
+    text-transform: capitalize;
 }
 
+.choice:enabled:active {
+    background-color: #2E7D32;
+    box-shadow: 0px 0px 12px -5px black;
+}
 
 #control-panel {
-    grid-row: 3;
+    grid-row: 2;
+}
+
+#multiple-choice {
+    grid-row: 2;
     display: grid;
+    height: 100%;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     justify-content: stretch;
@@ -128,4 +148,48 @@ header {
 #d.choice {
     grid-column: 2;
     grid-row: 2;
+}
+
+noscript {
+    font-size: 10vh;
+    color: #F44336;
+    grid-row: 2;
+    margin-top: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+}
+
+
+@keyframes vibrate {
+    0% {margin-left: 0px;}
+    25% {margin-right: 5px;}
+    50% {margin-right: 0px;}
+    75% {margin-left: 5px;}
+    100% {margin-left: 0px;}
+}
+
+
+.choice:disabled {
+    opacity: 0.5;
+    animation: .1s linear 0s 3 vibrate;
+    background-color: #F44336;
+
+}
+
+.error {
+    background-color: #F44336;
+}
+
+
+#init {
+    justify-self: center;
+}
+
+.message {
+    font-size: 5vh;
+    justify-self: center;
+    align-self: center;
+    padding: 1vh;
 }
