@@ -9,7 +9,7 @@ import csv
 from alembic.command import upgrade
 from alembic.config import Config
 from sqlalchemy.exc import ProgrammingError
-from locali.models import Plant
+from locali.models import Plant, Place, PlaceCategory
 from locali.core import db as _db
 from locali.api import create_app
 from ..helpers import TestFixtureException
@@ -108,17 +108,63 @@ def committed_plant(plant, session):
     return Plant.query.get(plant.id)
 
 
-@pytest.fixture()
-def sample_data(session, app):
-    path = os.path.join(app.config["BASE_DIR"], "tests/data/sample_data.csv")
-    columns = ["name", "image_url"]
+def sample_file(app, session, file_name, columns, key, model, create_func):
+    path = os.path.join(app.config["BASE_DIR"], "tests/data/{}".format(file_name))
     with open(path) as csvfile:
         reader = csv.DictReader(csvfile, columns)
         items = [
-            Plant(primary_name=row['name'], image_urls=[row['image_url']])
+            create_func(model, row)
             for row in reader
-            if not Plant.query.filter_by(primary_name=row['name']).first()]
+            if not model.query.filter_by(**{key: row[key]}).first()]
     for item in items:
         session.add(item)
         session.commit()
     print("ingested {} items for sample set".format(len(items)))
+
+
+@pytest.fixture()
+def sample_place_categories(session, app):
+    sample_file(app, session,
+                "sample_place_categories.csv",
+                ["name", "description"],
+                "name", PlaceCategory,
+                lambda model, row: model(**row))
+
+
+@pytest.fixture()
+def sample_places(session, app, sample_place_categories):
+    def make_place(model, row):
+        category = PlaceCategory.query.filter_by(name=row["category"]).first()
+        m = model(name=row['name'], description=row['description'],
+                  category_id=category.id)
+        category.places.append(m)
+        return m
+
+    sample_file(app, session,
+                "sample_places.csv",
+                ["name", "description", "category"],
+                "name", Place,
+                make_place)
+
+
+@pytest.fixture()
+def sample_plants(session, app, sample_places):
+    def make_plant(model, row):
+        place_names = row["places"].split(',')
+        months = [int(x) for x in row["months_available"].split(',')]
+        places = Place.query.filter(Place.name.in_(place_names)).all()
+        return model(primary_name=row["primary_name"],
+                     image_urls=[row["image_url"]],
+                     months_available=months,
+                     places=places)
+
+    sample_file(app, session,
+                "sample_plants.csv",
+                ["primary_name", "image_url", "places", "months_available"],
+                "primary_name", Plant,
+                make_plant)
+
+
+@pytest.fixture()
+def sample_data(sample_plants):
+    pass

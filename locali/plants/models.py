@@ -25,10 +25,10 @@ class Plant(db.Model, Dictable):
     image_urls = db.Column(ARRAY(db.String), nullable=False)
     location_description = db.Column(db.String)
     places = db.relationship(
-        "Places", secondary=plant_place_table,
+        "Place", secondary=plant_place_table,
         backref="plants")
     season_description = db.Column(db.String)
-    months_available = db.Column(ARRAY(db.String))
+    months_available = db.Column(ARRAY(db.Integer))
     harvest_description = db.Column(db.String)
     taste_description = db.Column(db.String)
     smell_description = db.Column(db.String)

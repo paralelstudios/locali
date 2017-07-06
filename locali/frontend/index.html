@@ -12,7 +12,7 @@
 		<img id="init-img" src="resources/imgs/paralel-logo.png">
 		<div class="choice message" id="init-msg">Starting up!</div>
 	    </div>
-	    <component :is="currentView" @ready="removeInit">
+	    <component :is="currentView" @change-view="changeView">
 	    </component>
 	</main>
 	<noscript><h4>Sorry, but you need Javascript to play :(</h4></noscript>

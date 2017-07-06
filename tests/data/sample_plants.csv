@@ -1,0 +1,5 @@
+acacia,resources/imgs/acacia.png,city,"2,3,5"
+bledo,resources/imgs/bledo.png,"city,river","2,3,4,5,6"
+flamboyan,resources/imgs/flamboyan.png,city,"6,7"
+margarita silvestre,resources/imgs/margarita-silvestre.png,"city,rain forest","4,5"
+pitahaya,resources/imgs/pitahaya.png,"rain forest","1,2,3,4"

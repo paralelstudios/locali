@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-
-matcheme.quizes.models
+locali.places.models
 ~~~~~~~~
-
+Locali Place models
 """
 from ..core import db
 from ..helpers import Dictable
@@ -15,12 +14,12 @@ class PlaceCategory(db.Model, Dictable):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False, unique=True, index=True)
     description = db.Column(db.String, nullable=False)
-    places = db.relationship('Places', backref='place_category')
+    places = db.relationship('Place', backref='place_category')
     banner_url = db.Column(db.String)
     icon_url = db.Column(db.String)
 
 
-class Places(db.Model, Dictable):
+class Place(db.Model, Dictable):
     __tablename__ = 'places'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False, unique=True, index=True)

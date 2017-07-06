@@ -6,9 +6,9 @@
     services module
 """
 
-from .places import PlacesService, PlaceCategoryService
+from .places import PlaceService, PlaceCategoryService
 from .plants import PlantService
 
 plants = PlantService()
-places = PlacesService()
+places = PlaceService()
 place_categories = PlaceCategoryService()

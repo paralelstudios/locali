@@ -6,11 +6,11 @@
 """
 
 from ..core import Service
-from .models import Places, PlaceCategory
+from .models import Place, PlaceCategory
 
 
-class PlacesService(Service):
-    __model__ = Places
+class PlaceService(Service):
+    __model__ = Place
 
 
 class PlaceCategoryService(Service):

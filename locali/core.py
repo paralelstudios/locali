@@ -81,9 +81,9 @@ class Service(object):
         """
         return self.__model__.query.filter_by(**kwargs)
 
-    def get_all_with_cols(self, *cols):
+    def get_query_with_cols(self, *cols):
         """Gets all the instances of the model with only certain cols selected"""
-        return self.__model__.query.options(load_only(*cols)).all()
+        return self.__model__.query.options(load_only(*cols))
 
     def first_or_404(self, **kwargs):
         """Tries to find an instance of the model filtered by the specified key word

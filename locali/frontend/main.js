@@ -2,23 +2,42 @@ var host = 'http://127.0.0.1:5000';
 var instance = axios.create({
     baseURL: host });
 
-var UserMessage = {
+Vue.component('user-message', {
     props: ["message"],
     template: '<div class="choice message" :class="{error: message.isError}">{{ message.text }}</div>'
+});
 
-};
-
-var Choice = {
-    props: ['value'],
-    template: '<option :id="$vnode.key" :value="value" @click="submitChoice" class="choice"><span>{{ value }} </span></option>',
+Vue.component('choice', {
+    props: ['label', "target"],
+    template: '<button :id="$vnode.key" :value="target" @click="submitChoice" class="choice"><span>{{ label }}</span></button>',
     computed: {
 	option: function () {
-	    return this.value.trim().toLowerCase();
+	    return this.label.trim().toLowerCase();
 	}
     },
     methods: {
 	submitChoice: function () {
 	    this.$emit("submit", this);
+	}
+    }
+});
+
+var Menu = {
+    data: function () {
+	return {
+	    menuOptions: [
+		{name: "Practice", id: "a", target: "quiz"},
+		{name: "Places", id: "b", target: "places"},
+		{name: "Plants", id: "c", target: "plants"},
+		{name: "In Season", id: "d", target: "season"}
+	    ]
+	};
+    },
+    template: '<div id="menuOptions"><choice v-for="option in this.menuOptions" :label="option.name" :target="option.target" :key="option.id" @submit="changeView">' +
+	'</choice></div>',
+    methods: {
+	changeView: function (choice) {
+	    this.$emit("change-view", choice.target);
 	}
     }
 };
@@ -32,10 +51,7 @@ var QuizEntity = {
 
 var MultipleChoice = {
     props: ["choices", "correctChoice"],
-    template: '<datalist id="multiple-choice"><choice v-for="choice in choices" :value="choice.name" :key="choice.id" @submit="checkChoice"></choice></datalist>',
-    components: {
-	'choice': Choice
-    },
+    template: '<div id="multiple-choice"><choice v-for="choice in choices" :label="choice.name" :target="choice.target" :key="choice.id" @submit="checkChoice"></choice></div>',
     methods: {
     	checkChoice: function (choiceEl) {
 	    if (choiceEl.option !== this.correctChoice) {
@@ -66,10 +82,9 @@ var Quiz = {
 	},
 	name: function () {
 	    return this.item["name"];
-	},
+	}
     },
     components: {
-	'user-message': UserMessage,
 	'quiz-entity': QuizEntity,
 	'multiple-choice': MultipleChoice
     },
@@ -94,7 +109,6 @@ var Quiz = {
 			vm.items[0],
 			function () {
 			    vm.loading = false;
-			    vm.$emit("ready");
 			    vm.setEntity();
 			}
 		    );
@@ -148,30 +162,40 @@ var Quiz = {
 		[this.item]
 	    );
 	    return choices.map(function (el) {
-		return {name: el["name"], id: options.pop()};
+		return {name: el["name"], target: el["name"], id: options.pop()};
 	    });
-	},
+	}
     }
 
 };
 
-var ItemUpload = {
-    template: '<form method=POST enctype=multipart/form-data>' +
-	'<input type=file name=photo>' +
-	'</form>'
-}
+var NYI = {
+    data: function () {
+	return {
+	    userMessage: {text: "Nothing here yet!"}
+	};
+    },
+    template: '<user-message :message="userMessage"></user-message>'
+};
 
 var app = new Vue({
     el: "#app",
     data: {
-	currentView: 'quiz'
+	currentView: 'mainMenu'
     },
     components: {
-	quiz: Quiz
+	quiz: Quiz,
+	season: NYI,
+	plants: NYI,
+	places: NYI,
+	mainMenu: Menu
+    },
+    created: function () {
+	document.getElementById("init").style.display = "none";
     },
     methods: {
-	removeInit: function () {
-	    document.getElementById("init").style.display = "none";
+	changeView: function (view) {
+	    this.currentView = view;
 	}
     }
 });
