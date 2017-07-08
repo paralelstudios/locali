@@ -36,7 +36,7 @@ class SeasonEndpoint(Resource):
 
 
 class ThisSeasonEndpoint(SeasonEndpoint):
-    uri = "/"
+    uri = ""
 
 
 add_resource(api, SeasonEndpoint)

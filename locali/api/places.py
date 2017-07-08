@@ -31,7 +31,7 @@ class PlaceCategoriesListEndpoint(Resource):
 
 
 class PlacesListEndpoint(Resource):
-    uri = '/categories/<category>'
+    uri = '/category/<category>'
 
     def get(self, category):
         category = _place_c.first_or_404(name=category)

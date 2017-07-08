@@ -64,7 +64,7 @@ var MultipleChoice = {
     }
 };
 
-var Quiz = {
+var QuizService = {
     data: function () {
 	return {
 	    quiz: "plants",
@@ -76,7 +76,7 @@ var Quiz = {
 	    userMessage: null
 	};
     },
-        computed: {
+    computed: {
 	imageUrl: function () {
 	    return this.item["image_url"];
 	},
@@ -178,24 +178,209 @@ var NYI = {
     template: '<user-message :message="userMessage"></user-message>'
 };
 
+
+function Element (element) {
+    return {
+	props: [element],
+	template: '<button class="' + element + 'Element" :value="' + element + '.name" @click="select">' +
+	    '<h4 class="' + element + 'Name">{{ ' + element + '.name }}</h4>' +
+	    '<p class="' + element + 'Description">{{ ' + element + '.description }}</p>' +
+	    '</button>',
+	methods: {
+	    select: function () {
+		this.$emit("select", this[element]);
+	    }
+	}
+    };
+};
+
+function List(items, item, endpoint, parameter) {
+    return {
+	props: parameter ? [parameter] : [],
+	data: function () {
+	    return {
+		items: [{name: "Test " + item,
+			      description: "This is a test " + item}],
+		selectedItem: null
+	    };
+	},
+	computed: {
+	    parameter: function () {
+		return parameter ? "/" + parameter + "/" +
+		    this.$props[parameter]
+		    .toLowerCase()
+		    .split(" ")
+		    .join("_") : "";
+	    }
+	},
+	components: {
+	    itemElement: Element(item)
+	},
+	template: '<section id="categories"">' +
+	    '<item-element v-for="item in items" :key="item.name" :' + item + '="item" @select="select"></item-element>' +
+	    '</section>',
+	created: function () {
+	    console.log("Creating "  + items + " List");
+	    this.getItems();
+	},
+	methods: {
+	    select: function (selectedItem) {
+		this.$emit("view-" + item, selectedItem.name);
+	    },
+	    getItems: function () {
+		var vm = this;
+		instance.get(endpoint + this.parameter)
+		    .then(function (resp) {
+			vm.items = resp.data;
+		    })
+		    .catch(function (err) {
+			console.log(err);
+ 			vm.userMessage = {isError: true, text: err.message };
+		    });
+	    }
+	}
+    };
+};
+
+
+function Item (item, endpoint) {
+    return  {
+	props: [item],
+	data: function () {
+	    return {
+		item: {name: "Test " + item,
+			photo: "resources/imgs/paralel-logo.png",
+			description: "blah blah"}
+	    };
+	},
+	computed: {
+	    parameter: function () {
+		return "/" +
+		    this.$props[item]
+		    .toLowerCase()
+		    .split(" ")
+		    .join("_");
+	    }
+	},
+
+	created: function () {
+	    console.log("Creating " + item + " page");
+	    this.getItem();
+	},
+	template: '<article class=' + item + '>' +
+	    '<h2 class="' + item + 'Title">{{ item.name }}</h2><hr>' +
+	    '<img class="' + item + 'Photo" :src="item.photo" :alt="item.name"/>' +
+	    '<p class="' + item + 'Description">{{ item.description }}</p>' +
+	    '</article>',
+	methods: {
+	    getItem: function() {
+		var vm = this;
+		instance.get(endpoint + this.parameter)
+		    .then(function (resp) {
+			vm.item = resp.data;
+		    })
+		    .catch(function (err) {
+			console.log(err);
+ 			vm.userMessage = {isError: true, text: err.message };
+		    });
+	    }
+	}
+
+    };
+}
+
+var SeasonService = {
+    data: function () {
+	return {
+	    currentView: "season",
+	    plant: null
+	};
+    },
+    components: {
+	season: List("plants", "plant", "/season"),
+	plant: Item("plant", "/plants")
+    },
+    template: '<section id="season">' +
+	'<component :plant="plant" :is="currentView" @view-plant="viewPlant"></component>' +
+	'</section>',
+    methods: {
+	viewPlant: function (plant) {
+	    this.plant = plant;
+	    this.currentView = 'plant';
+	}
+    }
+};
+
+var PlantService = {
+    data: function () {
+	return {
+	    plant: null,
+	    currentView: "plants"
+	};
+    },
+    components: {
+	plants: List("plants", "plant", "/plants"),
+	plant: Item("plant", "/plants")
+    },
+    template: '<section id="plants">' +
+	'<component :plant="plant" :is="currentView" @view-plant="viewPlant"></component>' +
+	'</section>',
+    methods: {
+	viewPlant: function (plant) {
+	    this.plant = plant;
+	    this.currentView = "plant";
+	}
+    }
+};
+
+var PlaceService = {
+    data: function () {
+	return {
+	    currentView: 'categories',
+	    category: null,
+	    place: null
+	};
+    },
+    components: {
+	categories: List("categories", "category", "/places/categories"),
+	categoryPlaces: List("places", "place", "/places", "category"),
+	place: Item("place", "/places")
+    },
+    template: '<section id="places">' +
+	'<component :place="place" :category="category" :is="currentView" @view-category="viewCategory" @view-place="viewPlace"></component>' +
+	'</section>',
+    methods: {
+	viewCategory: function (category) {
+	    this.category = category;
+	    this.currentView = "categoryPlaces";
+	},
+	viewPlace: function (place) {
+	    this.place = place;
+	    this.currentView = "place";
+	}
+    }
+};
+
 var app = new Vue({
     el: "#app",
     data: {
-	currentView: 'mainMenu'
+	currentView: 'main menu'
     },
     components: {
-	quiz: Quiz,
-	season: NYI,
-	plants: NYI,
-	places: NYI,
-	mainMenu: Menu
+	quiz: QuizService,
+	season: SeasonService,
+	plants: PlantService,
+	places: PlaceService,
+	"main menu": Menu
     },
     created: function () {
 	document.getElementById("init").style.display = "none";
+	document.getElementById("header").text = this.currentView;
     },
     methods: {
 	changeView: function (view) {
 	    this.currentView = view;
+	    document.getElementById("header").text = this.currentView;
 	}
     }
 });

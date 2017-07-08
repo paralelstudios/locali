@@ -16,7 +16,7 @@ api = Api(bp)
 
 
 class PlantsListEndpoint(Resource):
-    uri = "/"
+    uri = ""
 
     def get(self):
         plants = _plants.get_query_with_cols("primary_name").order_by("primary_name")
@@ -35,9 +35,11 @@ class PlantEndpoint(Resource):
     uri = "/<plant_name>"
 
     def get(self, plant_name):
-        plant = _plants.first_or_404(primary_name=plant_name)
+        plant = _plants.first_or_404(
+            primary_name=plant_name.replace('_', ' '))
 
-        return plant.as_dict(), 200
+        return {"name": plant.primary_name, "photo": plant.image_urls[0],
+                "description": "This is {}".format(plant.primary_name)}
 
 
 add_resource(api, PlantsListEndpoint)

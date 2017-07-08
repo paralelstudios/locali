@@ -19,7 +19,7 @@ def test_place_categories_list_get(client, sample_data):
 
 @pytest.mark.functional
 def test_places_list_get(client, sample_data):
-    resp = json.loads(client.get("/places/categories/urban").get_data())
+    resp = json.loads(client.get("/places/category/urban").get_data())
     assert resp
     assert len(resp) == 1
     assert resp[0]["name"] == "city"

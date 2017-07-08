@@ -67,8 +67,8 @@ header {
     box-shadow: 0px 2px 5px rgba(0, 0, 0, .26);
 }
 
-#logo {
-    font-size: 10vh;
+#header {
+    font-size: 9vh;
     font-weight: bold;
     color: #FFFFFF;
     text-decoration: none;
@@ -88,7 +88,7 @@ header {
     align-items: center;
 }
 
-#entity img {
+#entity img, #init img {
     height: 69vh;
     max-width: 95vw;
     border-radius: 5px;
@@ -202,4 +202,62 @@ noscript {
     height: 200%;
     align-self: center;
     width: 85vw;
+}
+
+.categoryElement, .placeElement, .plantElement {
+    width: 100vw;
+    text-align: left;
+    margin-top: 2vh;
+    box-shadow: 0px 0px 15px -5px black;
+    background-color: #F1F8E9;
+    color: #33691E;
+    padding-left: 1vw;
+}
+
+.categoryElement h4, .placeElement h4, .plantElement h4 {
+    font-size: 6vh;
+    text-transform: capitalize;
+}
+.categoryElement p, .placeElement p, .plantElement p {
+    font-size: 4vh;
+    font-weight: 300;
+    padding-top: 1vh;
+}
+section#places, section#plants {
+    display: flex;
+    flex-direction: column;
+
+}
+article.place, article.plant {
+    box-shadow: 0px 0px 15px -5px black;
+    align-self: center;
+    width: 95vw;
+    height: 100vh;
+    margin-top: 2vh;
+    background-color: #F1F8E9;
+    color: #33691E;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+
+}
+
+h2.placeTitle, h2.plantTitle {
+    font-size: 5vh;
+    padding-top: 1vh;
+    padding-left: 1vw;
+    text-transform: capitalize;
+}
+
+p.placeDescription, p.plantDescription {
+    font-size: 4vh;
+    font-weight: 300;
+    padding-left: 2.5%;
+}
+
+img.placePhoto, img.plantPhoto {
+    width: 95%;
+    margin-left: 2.5%;
+    height: 30vh;
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    border-radius: 5px;
 }

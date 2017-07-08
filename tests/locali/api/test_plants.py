@@ -11,7 +11,7 @@ import json
 
 @pytest.mark.functional
 def test_plants_list_get(client, sample_data):
-    resp = json.loads(client.get("/plants/").get_data())
+    resp = json.loads(client.get("/plants").get_data())
     assert resp
     assert len(resp) == 5
     assert set(resp[0].keys()) == {"name"}
