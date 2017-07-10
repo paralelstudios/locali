@@ -26,21 +26,21 @@ var Menu = {
     data: function () {
 	return {
 	    menuOptions: [
-		{name: "Practice", id: "a", target: "quiz"},
+		{name: "Practice", id: "a", target: "practice"},
 		{name: "Places", id: "b", target: "places"},
 		{name: "Plants", id: "c", target: "plants"},
 		{name: "In Season", id: "d", target: "season"}
 	    ]
 	};
     },
-    template: '<div id="menuOptions"><choice v-for="option in this.menuOptions" :label="option.name" :target="option.target" :key="option.id" @submit="changeView">' +
-	'</choice></div>',
+    template: '<div id="menuOptions"><router-link v-for="option in this.menuOptions" :to="option.target" :key="option.id"><choice :target="option.target" :label="option.name" @submit="changeView">' +
+	'</choice></router-link></div>',
     methods: {
 	changeView: function (choice) {
 	    this.$emit("change-view", choice.target);
 	}
-    }
-};
+    }}
+;
 
 var QuizEntity = {
     props: ["imageUrl"],
@@ -169,10 +169,10 @@ var QuizService = {
 
 };
 
-var NYI = {
+var FourOFour = {
     data: function () {
 	return {
-	    userMessage: {text: "Nothing here yet!"}
+	    userMessage: {text: "Where do you think you are, man?"}
 	};
     },
     template: '<user-message :message="userMessage"></user-message>'
@@ -196,7 +196,6 @@ function Element (element) {
 
 function List(items, item, endpoint, parameter) {
     return {
-	props: parameter ? [parameter] : [],
 	data: function () {
 	    return {
 		items: [{name: "Test " + item,
@@ -206,11 +205,7 @@ function List(items, item, endpoint, parameter) {
 	},
 	computed: {
 	    parameter: function () {
-		return parameter ? "/" + parameter + "/" +
-		    this.$props[parameter]
-		    .toLowerCase()
-		    .split(" ")
-		    .join("_") : "";
+		return parameter ? "/" + parameter + "/" + this.$route.params.name : "";
 	    }
 	},
 	components: {
@@ -225,7 +220,12 @@ function List(items, item, endpoint, parameter) {
 	},
 	methods: {
 	    select: function (selectedItem) {
-		this.$emit("view-" + item, selectedItem.name);
+		this.$router.push(
+		    {name: item,
+		     params: {
+			 name: selectedItem.name.toLowerCase().replace(" ", "_")
+		     }}
+		);
 	    },
 	    getItems: function () {
 		var vm = this;
@@ -245,7 +245,6 @@ function List(items, item, endpoint, parameter) {
 
 function Item (item, endpoint) {
     return  {
-	props: [item],
 	data: function () {
 	    return {
 		item: {name: "Test " + item,
@@ -253,16 +252,6 @@ function Item (item, endpoint) {
 			description: "blah blah"}
 	    };
 	},
-	computed: {
-	    parameter: function () {
-		return "/" +
-		    this.$props[item]
-		    .toLowerCase()
-		    .split(" ")
-		    .join("_");
-	    }
-	},
-
 	created: function () {
 	    console.log("Creating " + item + " page");
 	    this.getItem();
@@ -275,7 +264,7 @@ function Item (item, endpoint) {
 	methods: {
 	    getItem: function() {
 		var vm = this;
-		instance.get(endpoint + this.parameter)
+		instance.get(endpoint + "/" + this.$route.params.name)
 		    .then(function (resp) {
 			vm.item = resp.data;
 		    })
@@ -289,98 +278,88 @@ function Item (item, endpoint) {
     };
 }
 
-var SeasonService = {
-    data: function () {
+function PlaceItem () {
+    var item = Item("place", "/places");
+    item.data = function () {
 	return {
-	    currentView: "season",
-	    plant: null
-	};
-    },
-    components: {
-	season: List("plants", "plant", "/season"),
-	plant: Item("plant", "/plants")
-    },
-    template: '<section id="season">' +
-	'<component :plant="plant" :is="currentView" @view-plant="viewPlant"></component>' +
-	'</section>',
-    methods: {
-	viewPlant: function (plant) {
-	    this.plant = plant;
-	    this.currentView = 'plant';
-	}
+	    item: {name: "Test place",
+		   primary_image: "resources/imgs/paralel-logo.png",
+		   description: "blah blah",
+		   plants: [{name: "plant1"},
+			    {name: "plant2"}]}};
+
+    };
+    if (item.components) {
+	item.components["itemElement"] = Element("plant");
+    } else {
+	item.components = {itemElement: Element("plant")};
     }
+    item.methods.select = function (plant) {
+	this.$router.push(
+	    {name: 'plant',
+	     params: {
+		 name: plant.name.toLowerCase().replace(" ", "_")
+	     }}
+	);
+    };
+    item.template = '<article class="place">' +
+	'<h2 class="placeTitle">{{ item.name }}</h2><hr>' +
+	'<img class="placePhoto" :src="item.primary_image" :alt="item.name"/>' +
+	'<p class="placeDescription">{{ item.description }}</p>' +
+	'<hr><h4>Plants</h4><hr>' +
+	'<menu><item-element v-for="plant in item.plants" :key="plant.name" :plant="plant" @select="select"></item-element></menu>' +
+	'</article>';
+    return item;
 };
 
-var PlantService = {
-    data: function () {
-	return {
-	    plant: null,
-	    currentView: "plants"
-	};
-    },
-    components: {
-	plants: List("plants", "plant", "/plants"),
-	plant: Item("plant", "/plants")
-    },
-    template: '<section id="plants">' +
-	'<component :plant="plant" :is="currentView" @view-plant="viewPlant"></component>' +
-	'</section>',
-    methods: {
-	viewPlant: function (plant) {
-	    this.plant = plant;
-	    this.currentView = "plant";
-	}
-    }
-};
 
-var PlaceService = {
-    data: function () {
-	return {
-	    currentView: 'categories',
-	    category: null,
-	    place: null
-	};
-    },
-    components: {
-	categories: List("categories", "category", "/places/categories"),
-	categoryPlaces: List("places", "place", "/places", "category"),
-	place: Item("place", "/places")
-    },
-    template: '<section id="places">' +
-	'<component :place="place" :category="category" :is="currentView" @view-category="viewCategory" @view-place="viewPlace"></component>' +
-	'</section>',
-    methods: {
-	viewCategory: function (category) {
-	    this.category = category;
-	    this.currentView = "categoryPlaces";
-	},
-	viewPlace: function (place) {
-	    this.place = place;
-	    this.currentView = "place";
-	}
-    }
-};
+var router = new VueRouter({
+//    mode: 'history',
+    routes: [
+	{path: "/season",
+	 name: "season",
+	 component: List("plants", "plant", "/season")},
+	{path: "/places",
+	 name: "places",
+	 component: List("categories", "category", "/places/categories")},
+	{path: "/practice",
+	 name: "practice",
+	 component: QuizService},
+	{path: "/plants",
+	 name: "plants",
+	 component: List("plants", "plant", "/plants")},
+	{path: "/places/:name",
+	 name: "place",
+	 component: PlaceItem()},
+	{path: "/plants/:name",
+	 name: "plant",
+	 component: Item("plant", "/plants")},
+	{path: "/places/categories/:name",
+	 name: "category",
+	 component: List("places", "place", "/places", "category")},
+	{path: "*", name: "menu", component: Menu},
+    ]
+});
 
 var app = new Vue({
     el: "#app",
-    data: {
-	currentView: 'main menu'
-    },
-    components: {
-	quiz: QuizService,
-	season: SeasonService,
-	plants: PlantService,
-	places: PlaceService,
-	"main menu": Menu
+    router: router,
+    methods: {
+	updateHeader: function () {
+	    var header = this.$route.name;
+	    if (header !== "menu") {
+		header = "menu" + " > " + this.$route.name.replace("_", " ");
+	    }
+	    document.getElementById("header").text = header;
+	}
     },
     created: function () {
 	document.getElementById("init").style.display = "none";
-	document.getElementById("header").text = this.currentView;
+	this.updateHeader();
     },
-    methods: {
-	changeView: function (view) {
-	    this.currentView = view;
-	    document.getElementById("header").text = this.currentView;
+    watch: {
+	'$route': function (to, from) {
+	    this.updateHeader();
 	}
     }
 });

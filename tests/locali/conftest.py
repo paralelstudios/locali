@@ -136,13 +136,14 @@ def sample_places(session, app, sample_place_categories):
     def make_place(model, row):
         category = PlaceCategory.query.filter_by(name=row["category"]).first()
         m = model(name=row['name'], description=row['description'],
+                  primary_image=row["primary_image"],
                   category_id=category.id)
         category.places.append(m)
         return m
 
     sample_file(app, session,
                 "sample_places.csv",
-                ["name", "description", "category"],
+                ["name", "description", "category", "primary_image"],
                 "name", Place,
                 make_place)
 

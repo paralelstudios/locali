@@ -23,6 +23,7 @@ def post_plant(plant):
 def make_place(row):
     category = PlaceCategory.query.filter_by(name=row["category"]).first()
     m = dict(name=row['name'], description=row['description'],
+             primary_image=row["primary_image"],
              category_id=category.id)
     return m
 
@@ -38,7 +39,7 @@ class Ingest(Command):
             "post": post_plant
         },
         'places': {
-            "cols": ["name", "description", "category"],
+            "cols": ["name", "description", "category", "primary_image"],
             "key": "name",
             "class": Place,
             "make": make_place

@@ -32,3 +32,4 @@ def test_place_get(client, sample_data):
     assert resp
     assert resp["name"] == "rain forest"
     assert resp["description"] == "magical place of dark green"
+    assert resp["plants"]

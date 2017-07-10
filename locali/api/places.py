@@ -48,7 +48,10 @@ class PlaceEndpoint(Resource):
     def get(self, place_name):
         if "_" in place_name:
             place_name = " ".join(place_name.split("_"))
-        return _places.first_or_404(name=place_name).as_dict()
+        place = _places.first_or_404(name=place_name)
+        payload = place.as_dict()
+        payload["plants"] = [{"name": plant.primary_name} for plant in place.plants]
+        return payload
 
 
 add_resource(api, PlaceCategoriesListEndpoint)

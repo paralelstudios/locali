@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_script import Manager
 from locali.api import create_app
-from commands.ingest_plants import Ingest
+from commands.ingest import Ingest
 
 manager = Manager(create_app())
 
