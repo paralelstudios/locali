@@ -1,11 +1,10 @@
 backend:
   restart: always
-  build: .
+  build: ./backend
   ports:
     - "80:80"
   links:
     - postgres:postgres
-    - rabbitmq:rabbitmq
 
 postgres:
   restart: always
