@@ -64,6 +64,9 @@ header {
     grid-row: 1;
     width: 100%;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #4CAF50;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, .26);
     text-transform: lowercase;
@@ -72,6 +75,7 @@ header {
 #header {
     font-size: 9vh;
     font-weight: bold;
+    letter-spacing: 2vw;
     color: #FFFFFF;
     text-decoration: none;
     font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
@@ -100,6 +104,7 @@ header {
 }
 
 .choice {
+    letter-spacing: 1vw;
     border-radius: 10px;
     font-size: 3vh;
     margin: .5vh;
@@ -129,6 +134,9 @@ header {
     justify-content: stretch;
 }
 
+#multiple-choice .choice span {
+    letter-spacing: 0.5vw;
+}
 #a.choice {
     grid-column: 1;
     grid-row: 1;
@@ -248,16 +256,20 @@ article.place, article.plant {
 h2.placeTitle, h2.plantTitle {
     font-size: 6vh;
     padding-top: 1vh;
-    padding-left: 1vw;
+    letter-spacing: .25vw;
+    padding-left: 1.5vw;
     text-transform: capitalize;
 }
 
 p.placeDescription, p.plantDescription {
     font-size: 4vh;
     font-weight: 300;
-    padding-left: 2.5%;
+
 }
 
+article p.placeDescription, article p.plantDescription {
+    padding-left: 2.5%;
+}
 img.placePhoto, img.plantPhoto {
     max-width: 100%;
     margin-left: 2.5%;
@@ -269,17 +281,35 @@ img.placePhoto, img.plantPhoto {
 }
 
 article h4 {
-    font-size: 5vh;
+    font-size: 5.25vh;
     margin-left: 2.5%;
     margin-bottom: -2.5vh;
+    margin-top: 2vh;
 }
+
 
 article .plantElement {
     width: 100%;
+    hieght: 6vh;
 }
 
 article .plantElement h4 {
-    font-size: 8h;
+    margin-left: 2.5%;
+    letter-spacing: .25vw;
+    margin-bottom: 0;
+    padding-top: 0%;
+    margin-top: 0;
+    font-size: 4vh;
     font-weight: 300;
-    padding-bottom: 1vh;
+}
+
+@media (max-width: 700px) {
+    #header {
+	font-size: 6vh;
+    }
+}
+@media (max-width: 500px) {
+    #header {
+	font-size: 5vh;
+    }
 }

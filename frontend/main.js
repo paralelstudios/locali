@@ -1,4 +1,4 @@
-var host = 'http://127.0.0.1:5000';
+var host = 'http://34.226.219.15';
 var instance = axios.create({
     baseURL: host });
 
@@ -150,7 +150,7 @@ var QuizService = {
 	},
 	win: function () {
 	    this.userMessage = {text: "You won!\nRefresh to replay"};
-	    this.item = this.default_item;
+	    this.item = {name: "Para-lel Studios", image_url: "resources/imgs/paralel-logo.png"};
 	    this.choices = [];
 	},
 	_getOptions: function () {
@@ -198,8 +198,8 @@ function List(items, item, endpoint, parameter) {
     return {
 	data: function () {
 	    return {
-		items: [{name: "Test " + item,
-			      description: "This is a test " + item}],
+		items: [{name: "",
+			      description: ""}],
 		selectedItem: null
 	    };
 	},
@@ -215,7 +215,6 @@ function List(items, item, endpoint, parameter) {
 	    '<item-element v-for="item in items" :key="item.name" :' + item + '="item" @select="select"></item-element>' +
 	    '</section>',
 	created: function () {
-	    console.log("Creating "  + items + " List");
 	    this.getItems();
 	},
 	methods: {
@@ -247,9 +246,9 @@ function Item (item, endpoint) {
     return  {
 	data: function () {
 	    return {
-		item: {name: "Test " + item,
+		item: {name: "",
 			photo: "resources/imgs/paralel-logo.png",
-			description: "blah blah"}
+			description: ""}
 	    };
 	},
 	created: function () {
@@ -282,12 +281,12 @@ function PlaceItem () {
     var item = Item("place", "/places");
     item.data = function () {
 	return {
-	    item: {name: "Test place",
-		   primary_image: "resources/imgs/paralel-logo.png",
-		   description: "blah blah",
-		   plants: [{name: "plant1"},
-			    {name: "plant2"}]}};
-
+	    item: {name: "",
+		   primary_image: "",
+		   description: "",
+		   plants: [
+		       // {name: ""}
+		   ]}};
     };
     if (item.components) {
 	item.components["itemElement"] = Element("plant");
@@ -306,8 +305,8 @@ function PlaceItem () {
 	'<h2 class="placeTitle">{{ item.name }}</h2><hr>' +
 	'<img class="placePhoto" :src="item.primary_image" :alt="item.name"/>' +
 	'<p class="placeDescription">{{ item.description }}</p>' +
-	'<hr><h4>Plants</h4><hr>' +
-	'<menu><item-element v-for="plant in item.plants" :key="plant.name" :plant="plant" @select="select"></item-element></menu>' +
+	'<hr><h4 v-if="item.plants.length" >Local Plants</h4><hr>' +
+	'<menu class="cityPlantList"><item-element v-for="plant in item.plants" :key="plant.name" :plant="plant" @select="select"></item-element></menu>' +
 	'</article>';
     return item;
 };

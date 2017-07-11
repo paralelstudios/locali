@@ -6,7 +6,7 @@
 """
 
 import os
-
+from datetime import timedelta
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'local')
 DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -24,3 +24,11 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # API settings
 SECRET_KEY = os.environ.get('LOCALI_API_SECRET_KEY', 'secret-key-so-secret')
+BCRYPT_LOG_ROUNDS = 12
+JWT_AUTH_USERNAME_KEY = "email"
+JWT_EXPIRATION_DELTA = timedelta(1)
+
+# AWS credentials
+AWS_ACCESS_KEY = None
+AWS_SECRET_KEY = None
+AWS_REGION = 'us-east-1'

@@ -1,13 +1,18 @@
 Flask-SQLAlchemy==2.2
+SQLAlchemy==1.1.8
 Flask-Script==2.0.5
 toolz==0.8.2
 alembic==0.9.2
--e git+https://github.com/paralelstudios/locali.git#egg=locali
 psycopg2==2.7.1
 pytest==3.1.1
 Flask-RESTful==0.3.6
 Unidecode==0.4.20
 Flask-Uploads==0.2.1
+Flask-Bcrypt==0.7.1
+Flask-HTTPAuth==3.2.2
+Flask-JWT==0.3.2
 celery==4.0.2
 boto3==1.4.4
 Flask-Cors==3.0.3
+jsonschema==2.6.0
+pytest-flask==0.10.0

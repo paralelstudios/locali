@@ -10,7 +10,8 @@ from flask import Flask
 from .core import db
 from .helpers import register_blueprints
 from .middleware import HTTPMethodOverrideMiddleware
-
+from flask_jwt import JWT
+from .services import users as _users
 
 def create_app(package_name, package_path, settings_override=None):
     app = Flask(package_name, instance_relative_config=True)
@@ -31,6 +32,7 @@ def create_app(package_name, package_path, settings_override=None):
 
     # component initiation
     db.init_app(app)
+    jwt = JWT(app, _users.authenticate, _users.identity)  # noqa
 
     if not app.debug:
         handler = logging.StreamHandler(sys.stderr)

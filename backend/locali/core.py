@@ -112,6 +112,11 @@ class Service(object):
         """
         return self.__model__.query.get_or_404(id)
 
+    def get_and_409(self, **kwargs):
+        m = self.__model__.query.filter_by(**kwargs).first()
+        if m:
+            abort(409, description="{} already exists".format(m))
+
     def new(self, **kwargs):
         """Returns a new, unsaved instance of the service's model class.
 
