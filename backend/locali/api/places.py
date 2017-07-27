@@ -10,7 +10,7 @@ from flask_cors import CORS
 from ..services import place_categories as _place_c, places as _places
 from .base import add_resource
 
-bp = Blueprint('places', __name__, url_prefix='/places')
+bp = Blueprint('places', __name__, url_prefix='/api/places')
 CORS(bp)
 api = Api(bp)
 

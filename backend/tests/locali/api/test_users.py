@@ -17,7 +17,7 @@ def test_user_post(client, session):
         "password": "password",
         "email": "email"}
     data = jsonify_req(user_data)
-    resp = client.post('/users', **data)
+    resp = client.post('/api/users', **data)
     r_data = json.loads(resp.get_data())
     assert resp.status_code == 201
     assert "user_id" in r_data
@@ -28,9 +28,9 @@ def test_user_post(client, session):
                              *dissoc(user_data, "password").keys())
 
     # test duplicate post
-    resp = client.post('/users', **data)
+    resp = client.post('/api/users', **data)
     assert resp.status_code == 409
 
     # test post without reqs
-    resp = client.post('/users', **jsonify_req(dict(email="foff@foff.gmail.com")))
+    resp = client.post('/api/users', **jsonify_req(dict(email="foff@foff.gmail.com")))
     assert resp.json == {'message': ": 'password' is a required property"}

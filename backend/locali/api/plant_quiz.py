@@ -10,7 +10,7 @@ from flask_cors import CORS
 from ..services import plants as _plants
 from .base import add_resource
 
-bp = Blueprint('quizzes', __name__, url_prefix="/quizzes")
+bp = Blueprint('quizzes', __name__, url_prefix="/api/quizzes")
 CORS(bp)
 api = Api(bp)
 

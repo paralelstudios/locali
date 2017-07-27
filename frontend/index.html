@@ -1,29 +1,21 @@
 <!DOCTYPE html>
-<html>
-    <head>
-	<title>Locali</title>
-	<meta name="viewport" ontent="width-device-width">
-	<link type="text/css" rel="stylesheet" href="style.css">
-    </head>
-    <body>
-	<main id="app">
-	    <header><a id="header" href="">Locali</a></header>
-	    <div id="init">
-		<img id="init-img" src="resources/imgs/paralel-logo.png">
-		<div class="choice message" id="init-msg">Starting up!</div>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Botani</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="dist/build.css">
+  </head>
+  <body>
+      <main id="app">
+	  <header><a id="header" href="">Locali</a></header>
+	  <div id="init">
+	      <img id="init-img" src="resources/imgs/paralel-logo.png">
+	      <div class="choice message" id="init-msg">Starting up!</div>
 	    </div>
-	    <router-view></router-view>
-	</main>
-	<noscript><h4>Sorry, but you need Javascript to play :(</h4></noscript>
-	<script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
-	<script>window._ || document.write('<script src=resources/js/lodash.js><\/script>')</script>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<script>window.axios || document.write('<script src=resources/js/axios.min.js><\/script>')</script>
-	<script src="https://unpkg.com/vue"></script>
-	<script>window.Vue || document.write('<script src=resources/js/vue.js><\/script>')</script>
-	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
-	<script>window.VueRouter || document.write('<script src=resources/js/vue.js><\/script>')</script>
-
-	<script src="main.js"></script>
-    </body>
+	  <noscript><h4>Sorry, but you need Javascript to play :(</h4></noscript>
+      </main>
+      <script src="dist/build.js"></script>
+  </body>
 </html>

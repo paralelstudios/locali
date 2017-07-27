@@ -11,7 +11,7 @@ from ..services import plants as _plants
 from .base import add_resource
 from datetime import datetime
 
-bp = Blueprint('season', __name__, url_prefix="/season")
+bp = Blueprint('season', __name__, url_prefix="/api/season")
 CORS(bp)
 api = Api(bp)
 

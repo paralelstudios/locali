@@ -4,7 +4,6 @@
     ~~~~~~~~~~~~~~~~
     Users API resources
 """
-from uuid import uuid4
 from flask_restful import Api
 from flask import Blueprint, request
 from flask_cors import CORS
@@ -12,7 +11,7 @@ from .base import add_resource
 from ..helpers import SchemaEndpoint
 from ..services import users as _users
 
-bp = Blueprint('users', __name__, url_prefix='/users')
+bp = Blueprint('users', __name__, url_prefix='/api/users')
 CORS(bp)
 api = Api(bp)
 

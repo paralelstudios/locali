@@ -1,23 +1,36 @@
-backend:
-  restart: always
-  build: ./backend
-  ports:
-    - "80:80"
-  links:
-    - postgres:postgres
+version: '3'
+services:
+  frontend:
+    restart: always
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
 
-postgres:
-  restart: always
-  image: postgres:latest
-  env_file: db.env.secrets
-  volumes_from:
-    - data
-  ports:
-    - "5432:5432"
+  backend:
+    restart: always
+    build: ./backend
+    env_file: db.env.secrets
+    environment:
+      - ENVIRONMENT=dev
+      - POSTGRES_PORT_5432_TCP_ADDR=db
+    expose:
+      - "80"
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
 
+  db:
+    restart: always
+    image: postgres:latest
+    env_file: db.env.secrets
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    expose:
+      - "5432"
 
-data:
-  image: postgres:latest
-  command: "true"
-  volumes:
-    - /var/lib/postgresql
+volumes:
+  postgres-data:
+    driver: local

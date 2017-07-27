@@ -10,7 +10,7 @@ from flask_cors import CORS
 from ..services import plants as _plants
 from .base import add_resource
 
-bp = Blueprint('plants', __name__, url_prefix="/plants")
+bp = Blueprint('plants', __name__, url_prefix="/api/plants")
 CORS(bp)
 api = Api(bp)
 
@@ -20,15 +20,16 @@ class PlantsListEndpoint(Resource):
 
     def get(self):
         plants = _plants.get_query_with_cols("primary_name").order_by("primary_name")
+        resp = [
+            {"name": plant.primary_name}
+            for plant in plants
+        ]
 
-        if not plants:
+        if not resp:
             abort(404,
                   description="For some reason, there are no plants. Hmmm...")
 
-        return [
-            {"name": plant.primary_name}
-            for plant in plants
-        ], 200
+        return resp, 200
 
 
 class PlantEndpoint(Resource):
