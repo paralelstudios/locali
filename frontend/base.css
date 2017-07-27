@@ -217,13 +217,14 @@ noscript {
 }
 
 .categoryElement, .placeElement, .plantElement {
-    width: 100vw;
+    width: 90vw;
     text-align: left;
     margin-top: 2vh;
     box-shadow: 0px 0px 15px -5px black;
     background-color: #F1F8E9;
     color: #33691E;
-    padding-left: 1vw;
+    padding-left: 2vw;
+    border-radius: 5px;
 }
 
 .categoryElement h4, .placeElement h4, .plantElement h4 {
@@ -235,10 +236,10 @@ noscript {
     font-weight: 300;
     padding-top: 1vh;
 }
-section#places, section#plants {
+section#places, section#plants, section#categories {
     display: flex;
     flex-direction: column;
-
+    align-items: center;
 }
 article.place, article.plant {
     box-shadow: 0px 0px 15px -5px black;
@@ -289,8 +290,8 @@ article h4 {
 
 
 article .plantElement {
-    width: 100%;
-    hieght: 6vh;
+    width: 90%;
+    height: 6vh;
 }
 
 article .plantElement h4 {
@@ -312,4 +313,10 @@ article .plantElement h4 {
     #header {
 	font-size: 5vh;
     }
+}
+
+article > menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

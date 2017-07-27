@@ -7,6 +7,7 @@ import Choice from "./Choice.vue"
 
 export default {
     name: "multiple-choice",
+    props: ["choices", "correctChoice"],
     components: {
 	Choice
     },

@@ -5,7 +5,7 @@ import { Element, List, Item, PlaceItem } from "./helpers";
 
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: process.env.NODE_ENV === "production" ? 'history': '',
     routes: [
 	{path: "/season",
 	 name: "season",

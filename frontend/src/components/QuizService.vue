@@ -15,6 +15,8 @@ import QuizEntity from "./QuizEntity.vue";
 import MultipleChoice from "./MultipleChoice.vue";
 import UserMessage from "./UserMessage.vue";
 import config from "../config";
+import sampleSize from 'lodash.samplesize';
+import shuffle from 'lodash.shuffle';
 
 export default {
     data () {
@@ -43,7 +45,7 @@ export default {
 	    var vm = this;
 	    this.$http.get("/api/quizzes/" + this.quiz)
 		.then(function (resp) {
-		    vm.items = _.shuffle(resp.data);
+		    vm.items = shuffle(resp.data);
 		    vm.downloadImage(
 			vm.items[0],
 			function () {
@@ -53,8 +55,10 @@ export default {
 		    );
 		})
 		.catch(function (err) {
+		    console.log(err);
  		    vm.userMessage = {isError: true,
-				      text: err.response.data.description};
+				      text: err.response.data.description ||
+				      err.response.statusText};
 		});
 	},
 	setNewEntity () {
@@ -93,13 +97,14 @@ export default {
 	    this.choices = [];
 	},
 	_getOptions () {
-	    var options = _.shuffle(["a", "b", "c", "d"]),
-		choices = _.sampleSize(
-		_.shuffle(this.items.concat(this.solved)),
+	    var options = shuffle(["a", "b", "c", "d"]),
+		choices = sampleSize(
+		shuffle(this.items.concat(this.solved)),
 		3
 	    ).concat(
 		[this.item]
 	    );
+	    console.log("choices", choices)
 	    return choices.map(function (el) {
 		return {name: el["name"], target: el["name"], id: options.pop()};
 	    });
