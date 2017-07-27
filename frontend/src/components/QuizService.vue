@@ -53,7 +53,8 @@ export default {
 		    );
 		})
 		.catch(function (err) {
- 		    vm.userMessage = {isError: true, text: err.statusText };
+ 		    vm.userMessage = {isError: true,
+				      text: err.response.data.description};
 		});
 	},
 	setNewEntity () {
