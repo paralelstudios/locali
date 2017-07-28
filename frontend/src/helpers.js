@@ -1,3 +1,5 @@
+import UserMessage from "./components/UserMessage.vue";
+
 function Element (element) {
     return {
 	name: "item-element",
@@ -18,8 +20,9 @@ function List(items, item, endpoint, parameter) {
     return {
 	data () {
 	    return {
-		items: [{name: "",
-			      description: ""}],
+		userMessage: null,
+		items: [ // {name: "", description: ""}
+		],
 		selectedItem: null
 	    };
 	},
@@ -29,10 +32,12 @@ function List(items, item, endpoint, parameter) {
 	    }
 	},
 	components: {
-	    itemElement: Element(item)
+	    itemElement: Element(item),
+	    UserMessage
 	},
-	template: '<section id="categories"">' +
-	    '<item-element v-for="item in items" :key="item.name" :' + item + '="item" @select="select"></item-element>' +
+	template: '<section id="' + items + '"">' +
+	    '<user-message v-if="userMessage" :message="userMessage"></user-message>' +
+	    '<item-element v-else v-for="item in items" :key="item.name" :' + item + '="item" @select="select"></item-element>' +
 	    '</section>',
 	created () {
 	    this.getItems();
@@ -53,8 +58,9 @@ function List(items, item, endpoint, parameter) {
 			vm.items = resp.data;
 		    })
 		    .catch(function (err) {
-			console.log(err);
- 			vm.userMessage = {isError: true, text: err.message };
+			vm.userMessage = {isError: true,
+					  text: err.response.data.description ||
+					  err.response.statusText};
 		    });
 	    }
 	}
@@ -66,6 +72,7 @@ function Item (item, endpoint) {
     return  {
 	data () {
 	    return {
+		userMessage: null,
 		item: {name: "",
 			photo: "resources/imgs/paralel-logo.png",
 			description: ""}
@@ -76,20 +83,24 @@ function Item (item, endpoint) {
 	    this.getItem();
 	},
 	template: '<article class=' + item + '>' +
+	    '<user-message v-if="userMessage" :message="userMessage"></user-message>' +
 	    '<h2 class="' + item + 'Title">{{ item.name }}</h2><hr>' +
 	    '<img class="' + item + 'Photo" :src="item.photo" :alt="item.name"/>' +
 	    '<p class="' + item + 'Description">{{ item.description }}</p>' +
 	    '</article>',
 	methods: {
 	    getItem () {
+		console.log("get");
 		var vm = this;
 		this.$http.get("/api" + endpoint + "/" + this.$route.params.name)
 		    .then(function (resp) {
+			console.log("got");
 			vm.item = resp.data;
 		    })
 		    .catch(function (err) {
-			console.log(err);
- 			vm.userMessage = {isError: true, text: err.message };
+			vm.userMessage = {isError: true,
+					  text: err.response.data.description ||
+					  err.response.statusText};
 		    });
 	    }
 	}
@@ -102,18 +113,24 @@ function PlaceItem () {
     item.data = function () {
 	return {
 	    item: {name: "",
-		   primary_image: "",
-		   description: "",
-		   plants: [
-		       // {name: ""}
-		   ]}};
+		    primary_image: "",
+		    description: "",
+		    subplaces: [
+			// {name: ""}
+		    ],
+		    plants: [
+			// {name: ""}
+		    ]}};
     };
+
     if (item.components) {
-	item.components["itemElement"] = Element("plant");
+	item.components["plantElement"] = Element("plant");
+	item.components["placeElement"] = Element("place");
     } else {
-	item.components = {itemElement: Element("plant")};
+	item.components = {plantElement: Element("plant"),
+			   placeElement: Element("place")};
     }
-    item.methods.select = function (plant) {
+    item.methods.selectPlant = function (plant) {
 	this.$router.push(
 	    {name: 'plant',
 	     params: {
@@ -121,12 +138,25 @@ function PlaceItem () {
 	     }}
 	);
     };
+    item.methods.selectPlace = function (place) {
+	this.$router.push(
+	    {name: 'place',
+	     params: {
+		 name: place.name.toLowerCase().replace(" ", "_")}
+	    }
+	);
+	this.getItem();
+
+    };
+
     item.template = '<article class="place">' +
 	'<h2 class="placeTitle">{{ item.name }}</h2><hr>' +
 	'<img class="placePhoto" :src="item.primary_image" :alt="item.name"/>' +
 	'<p class="placeDescription">{{ item.description }}</p>' +
 	'<hr><h4 v-if="item.plants.length" >Local Plants</h4><hr>' +
-	'<menu class="cityPlantList"><item-element v-for="plant in item.plants" :key="plant.name" :plant="plant" @select="select"></item-element></menu>' +
+	'<menu class="cityPlantList"><plant-element v-for="plant in item.plants" :key="plant.name" :plant="plant" @select="selectPlant"></plant-element></menu>' +
+	'<hr><h4 v-if="item.subplaces.length" >Subplaces</h4><hr>' +
+	'<menu class="cityPlaceList"><place-element v-for="place in item.subplaces" :key="place.name" :place="place" @select="selectPlace"></place-element></menu>' +
 	'</article>';
     return item;
 };

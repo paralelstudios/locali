@@ -1,9 +1,9 @@
 <template>
-  <div id="menuOptions">
+  <section id="menuOptions">
     <router-link v-for="option in this.menuOptions" :to="option.target" :key="option.id">
       <choice :target="option.target" :label="option.name" @submit="changeView"></choice>
     </router-link>
-  </div>
+  </section>
 </template>
 
 

@@ -6,12 +6,11 @@
 """
 
 from ..core import Service
-from .models import Place, PlaceCategory
+from .models import Place
 
 
 class PlaceService(Service):
     __model__ = Place
 
-
-class PlaceCategoryService(Service):
-    __model__ = PlaceCategory
+    def get_root_places_query(self):
+        return self.__model__.query.filter_by(superplace_id=None)

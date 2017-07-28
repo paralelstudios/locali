@@ -9,7 +9,7 @@ import csv
 from alembic.command import upgrade
 from alembic.config import Config
 from sqlalchemy.exc import ProgrammingError
-from locali.models import Plant, Place, PlaceCategory
+from locali.models import Plant, Place
 from locali.core import db as _db
 from locali.api import create_app
 from ..helpers import TestFixtureException
@@ -38,6 +38,7 @@ def client(app):
 @pytest.yield_fixture(scope="session")
 def db(app):
     def teardown():
+        _db.app = app
         print("reflecting")
         _db.reflect()
         print("dropping all")
@@ -116,34 +117,25 @@ def sample_file(app, session, file_name, columns, key, model, create_func):
             create_func(model, row)
             for row in reader
             if not model.query.filter_by(**{key: row[key]}).first()]
-    for item in items:
-        session.add(item)
-        session.commit()
     print("ingested {} items for sample set".format(len(items)))
 
 
 @pytest.fixture()
-def sample_place_categories(session, app):
-    sample_file(app, session,
-                "sample_place_categories.csv",
-                ["name", "description"],
-                "name", PlaceCategory,
-                lambda model, row: model(**row))
-
-
-@pytest.fixture()
-def sample_places(session, app, sample_place_categories):
+def sample_places(session, app):
     def make_place(model, row):
-        category = PlaceCategory.query.filter_by(name=row["category"]).first()
+        print("row superplace", row["superplace"])
+        superplace = Place.query.filter_by(name=row["superplace"]).first()
+        print("superplace", superplace)
         m = model(name=row['name'], description=row['description'],
                   primary_image=row["primary_image"],
-                  category_id=category.id)
-        category.places.append(m)
+                  superplace_id=superplace.id if superplace else None)
+        session.add(m)
+        session.commit()
         return m
 
     sample_file(app, session,
                 "sample_places.csv",
-                ["name", "description", "category", "primary_image"],
+                ["name", "description", "superplace", "primary_image"],
                 "name", Place,
                 make_place)
 
@@ -154,10 +146,13 @@ def sample_plants(session, app, sample_places):
         place_names = row["places"].split(',')
         months = [int(x) for x in row["months_available"].split(',')]
         places = Place.query.filter(Place.name.in_(place_names)).all()
-        return model(primary_name=row["primary_name"],
-                     image_urls=[row["image_url"]],
-                     months_available=months,
-                     places=places)
+        m = model(primary_name=row["primary_name"],
+                  image_urls=[row["image_url"]],
+                  months_available=months,
+                  places=places)
+        session.add(m)
+        session.commit()
+        return m
 
     sample_file(app, session,
                 "sample_plants.csv",

@@ -12,7 +12,7 @@ const router = new VueRouter({
 	 component: List("plants", "plant", "/season")},
 	{path: "/places",
 	 name: "places",
-	 component: List("categories", "category", "/places/categories")},
+	 component: List("places", "place", "/places")},
 	{path: "/practice",
 	 name: "practice",
 	 component: QuizService},
@@ -25,9 +25,6 @@ const router = new VueRouter({
 	{path: "/plants/:name",
 	 name: "plant",
 	 component: Item("plant", "/plants")},
-	{path: "/places/categories/:name",
-	 name: "category",
-	 component: List("places", "place", "/places", "category")},
 	{path: "*", name: "menu", component: Menu},
     ]
 });

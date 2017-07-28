@@ -55,7 +55,6 @@ export default {
 		    );
 		})
 		.catch(function (err) {
-		    console.log(err);
  		    vm.userMessage = {isError: true,
 				      text: err.response.data.description ||
 				      err.response.statusText};

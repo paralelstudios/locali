@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from locali.core import db
-from locali.models import Plant, Place, PlaceCategory
+from locali.models import Plant, Place
 from flask_script import Command, Option
 import csv
 
@@ -9,10 +9,12 @@ def make_plant(row):
     place_names = row["places"].split(',')
     months = [int(x) for x in row["months_available"].split(',')]
     places = Place.query.filter(Place.name.in_(place_names)).all()
-    return dict(primary_name=row["primary_name"],
-                image_urls=[row["image_url"]],
-                months_available=months,
-                places=places)
+    m = Plant(primary_name=row["primary_name"],
+              image_urls=[row["image_url"]],
+              months_available=months,
+              places=places)
+    db.session.add(m)
+    db.session.commit()
 
 
 def post_plant(plant):
@@ -21,10 +23,12 @@ def post_plant(plant):
 
 
 def make_place(row):
-    category = PlaceCategory.query.filter_by(name=row["category"]).first()
-    m = dict(name=row['name'], description=row['description'],
-             primary_image=row["primary_image"],
-             category_id=category.id)
+    superplace = Place.query.filter_by(name=row["superplace"]).first()
+    m = Place(name=row['name'], description=row['description'],
+              primary_image=row["primary_image"],
+              superplace_id=superplace.id if superplace else None)
+    db.session.add(m)
+    db.session.commit()
     return m
 
 
@@ -39,17 +43,11 @@ class Ingest(Command):
             "post": post_plant
         },
         'places': {
-            "cols": ["name", "description", "category", "primary_image"],
+            "cols": ["name", "description", "superplace", "primary_image"],
             "key": "name",
             "class": Place,
             "make": make_place
         },
-        'categories': {
-            "cols": ["name", "description"],
-            "key": "name",
-            "class": PlaceCategory,
-            "make": lambda x: x
-        }
     }
 
     option_list = (
@@ -65,9 +63,6 @@ class Ingest(Command):
         with open(filename) as csvfile:
             reader = csv.DictReader(csvfile, self.model["cols"])
             models = list(map(self.model["make"], filter(self._isunique, list(reader))))
-
-        db.session.bulk_insert_mappings(self.model["class"], models)
-        db.session.commit()
 
         if self.model.get("post"):
             [self.model["post"](model) for model in models]

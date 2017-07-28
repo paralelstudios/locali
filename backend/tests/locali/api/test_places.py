@@ -11,19 +11,19 @@ import json
 
 @pytest.mark.functional
 def test_place_categories_list_get(client, sample_data):
-    resp = json.loads(client.get("/api/places/categories").get_data())
+    resp = json.loads(client.get("/api/places").get_data())
     assert resp
     assert len(resp) == 2
-    assert set(resp[0].keys()) == {"name", "description", "id"}
+    assert set(resp[0].keys()) == {"name", "description"}
 
 
 @pytest.mark.functional
-def test_places_list_get(client, sample_data):
-    resp = json.loads(client.get("/api/places/category/urban").get_data())
+def test_places_super_get(client, sample_data):
+    resp = json.loads(client.get("/api/places/urban").get_data())
     assert resp
-    assert len(resp) == 1
-    assert resp[0]["name"] == "city"
-    assert resp[0]["description"] == "dirty cesspool where only the hardiest survive"
+    assert resp["name"] == "urban"
+    assert resp["description"] == "great metropolis of consumption"
+    assert resp["subplaces"]
 
 
 @pytest.mark.functional
