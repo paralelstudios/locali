@@ -48,114 +48,60 @@ table {
 }
 button {
     border: none;
+    cursor: pointer;
 }
 
 main {
     background-color: #C8E6C9;
-    display: grid;
-    grid-template-rows: 10vh 86vh; /*73vh 16vh;*/
+    display: flex;
+    flex-direction: column;
     height: 100vh;
-    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
     overflow: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
 }
 
+main * {
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+    color: #FFFFFF;
+
+
+}
 
 header {
-    grid-row: 1;
-    width: 100%;
     text-align: center;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     background-color: #4CAF50;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, .26);
+    height: 14vh;
+}
+
+header * {
+    z-index: 100;
+    background-color: #4CAF50;
     text-transform: lowercase;
 }
 
-#header {
+main > section {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%
+}
+
+#routeName {
+    text-decoration: none;
     font-size: 9vh;
     font-weight: bold;
     letter-spacing: 2vw;
-    color: #FFFFFF;
-    text-decoration: none;
-    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+    flex-grow: 2;
 }
 
-#quiz {
-    grid-row: 2;
-    display: grid;
-    grid-template-rows: 85% 19%;
-}
-
-#entity {
-    grid-row: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#entity img, #init img {
-    height: 69vh;
-    max-width: 95vw;
-    border-radius: 5px;
-}
-.blurred {
-    filter: blur(10xpx);
-}
-
-.choice {
-    letter-spacing: 1vw;
-    border-radius: 10px;
-    font-size: 3vh;
-    margin: .5vh;
-    text-align: center;
-    background-color: #43A047;
-    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
-    box-shadow: 0px 0px 15px -5px black;
-    color: white;
-    text-transform: capitalize;
-}
-
-.choice:enabled:active {
-    background-color: #2E7D32;
-    box-shadow: 0px 0px 12px -5px black;
-}
-
-#control-panel {
-    grid-row: 2;
-}
-
-#multiple-choice {
-    grid-row: 2;
-    display: grid;
-    height: 100%;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    justify-content: stretch;
-}
-
-#multiple-choice .choice span {
-    letter-spacing: 0.5vw;
-}
-#a.choice {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-#b.choice {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-#c.choice {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-#d.choice {
-    grid-column: 2;
-    grid-row: 2;
-}
 
 noscript {
     font-size: 10vh;
@@ -168,111 +114,95 @@ noscript {
     font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
 }
 
-
-@keyframes vibrate {
-    0% {margin-left: 0px;}
-    25% {margin-right: 5px;}
-    50% {margin-right: 0px;}
-    75% {margin-left: 5px;}
-    100% {margin-left: 0px;}
-}
-
-
-.choice:disabled {
-    opacity: 0.5;
-    animation: .1s linear 0s 3 vibrate;
-    background-color: #F44336;
-
-}
-
 .error {
     background-color: #F44336;
 }
 
 
-#init {
+section#init {
     justify-self: center;
-}
-
-.message {
-    font-size: 5vh;
-    justify-self: center;
-    align-self: center;
-    padding: 1vh;
-}
-
-#menuOptions a {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
+    text-align: center;
 
 }
 
-#menuOptions .choice {
-    margin-top: 4vh;
-    font-size: 5vh;
-    height: 15vh;
-    align-self: center;
-    width: 85vw;
-}
-
-.categoryElement, .placeElement, .plantElement {
-    width: 90vw;
-    text-align: left;
-    margin-top: 2vh;
-    box-shadow: 0px 0px 15px -5px black;
-    background-color: #F1F8E9;
+section#init > h2 {
     color: #33691E;
-    padding-left: 2vw;
+    letter-spacing: 1vw;
+    font-weight: 300;
+    font-size: 10vh;
+
+}
+section#init > img {
+    height: 69vh;
+    max-width: 95vw;
     border-radius: 5px;
 }
 
-.categoryElement h4, .placeElement h4, .plantElement h4 {
+.elementList {
+    align-content: space-between;
+}
+.element {
+    width: 90vw;
+    text-align: left;
+    box-shadow: 0px 0px 15px -5px black;
+    background-color: #F1F8E9;
+    padding-left: 2vw;
+    border-radius: 5px;
+    transition: all 0.5s ease;
+    margin-top: 2vh;
+}
+
+.element:hover {
+    margin-top: 3vh;
+    margin-bottom: 1vh;
+    background-color: #C8E6C9;
+}
+
+.subelementList > menu > .element:hover {
+    margin-top: 2vh;
+    margin-bottom: 0;
+}
+.element *, .elementView * {
+    color: #33691E;
+}
+.element > h4 {
     font-size: 6vh;
     text-transform: capitalize;
 }
-.categoryElement p, .placeElement p, .plantElement p {
+.element > p {
     font-size: 4vh;
     font-weight: 300;
     padding-top: 1vh;
 }
-section#places, section#plants, section#categories, section#menuOptions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: space-around;
-}
-article.place, article.plant {
+.elementView {
     box-shadow: 0px 0px 15px -5px black;
     width: 95vw;
-    justify-self: center;
     height: 100vh;
     margin-top: 2vh;
     background-color: #F1F8E9;
     color: #33691E;
     overflow: auto;
+}
+
+.elementView > article {
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
-
-h2.placeTitle, h2.plantTitle {
-    font-size: 6vh;
+.elementView > article > h2 {
+    font-size: 7vh;
     padding-top: 1vh;
     letter-spacing: .25vw;
     padding-left: 1.5vw;
     text-transform: capitalize;
 }
 
-p.placeDescription, p.plantDescription {
+.elementView > article > p {
     font-size: 4vh;
     font-weight: 300;
-
-}
-
-article p.placeDescription, article p.plantDescription {
     padding-left: 2.5%;
 }
-img.placePhoto, img.plantPhoto {
+.elementView > article > img {
     max-width: 100%;
     margin-left: 2.5%;
     align-self: center;
@@ -282,28 +212,6 @@ img.placePhoto, img.plantPhoto {
     border-radius: 5px;
 }
 
-article h4 {
-    font-size: 5.25vh;
-    margin-left: 2.5%;
-    margin-bottom: -2.5vh;
-    margin-top: 2vh;
-}
-
-
-article .plantElement {
-    width: 90%;
-    height: 6vh;
-}
-
-article .plantElement h4 {
-    margin-left: 2.5%;
-    letter-spacing: .25vw;
-    margin-bottom: 0;
-    padding-top: 0%;
-    margin-top: 0;
-    font-size: 4vh;
-    font-weight: 300;
-}
 
 @media (max-width: 700px) {
     #header {
@@ -316,12 +224,18 @@ article .plantElement h4 {
     }
 }
 
-article > menu {
+.subelementList {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 2.5%;
 }
 
-menu > .placeElement h4{
-    margin-bottom: 0;
+.subelementList > h3 {
+    font-size: 5.5vh;
+    align-self: flex-start;
+}
+
+.subelementList h4 {
+    font-size: 4vh;
 }

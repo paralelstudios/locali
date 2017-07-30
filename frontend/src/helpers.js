@@ -4,9 +4,9 @@ function Element (element) {
     return {
 	name: "item-element",
 	props: [element],
-	template: '<button class="' + element + 'Element" :value="' + element + '.name" @click="select">' +
-	    '<h4 class="' + element + 'Name">{{ ' + element + '.name }}</h4>' +
-	    '<p class="' + element + 'Description">{{ ' + element + '.description }}</p>' +
+	template: '<button class="element" :value="' + element + '.name" @click="select">' +
+	    '<h4>{{ ' + element + '.name }}</h4>' +
+	    '<slot></slot>' +
 	    '</button>',
 	methods: {
 	    select () {
@@ -35,9 +35,9 @@ function List(items, item, endpoint, parameter) {
 	    itemElement: Element(item),
 	    UserMessage
 	},
-	template: '<section id="' + items + '"">' +
+	template: '<section class="elementList">' +
 	    '<user-message v-if="userMessage" :message="userMessage"></user-message>' +
-	    '<item-element v-else v-for="item in items" :key="item.name" :' + item + '="item" @select="select"></item-element>' +
+	    '<item-element v-else v-for="item in items" :key="item.name" :' + item + '="item" @select="select"><p>{{ item.description }} </p></item-element>' +
 	    '</section>',
 	created () {
 	    this.getItems();
@@ -82,12 +82,14 @@ function Item (item, endpoint) {
 	    console.log("Creating " + item + " page");
 	    this.getItem();
 	},
-	template: '<article class=' + item + '>' +
+	template: '<section class="elementView">' +
+	    '<article>' +
 	    '<user-message v-if="userMessage" :message="userMessage"></user-message>' +
-	    '<h2 class="' + item + 'Title">{{ item.name }}</h2><hr>' +
-	    '<img class="' + item + 'Photo" :src="item.photo" :alt="item.name"/>' +
-	    '<p class="' + item + 'Description">{{ item.description }}</p>' +
-	    '</article>',
+	    '<h2>{{ item.name }}</h2><hr>' +
+	    '<img :src="item.photo" :alt="item.name"/>' +
+	    '<p>{{ item.description }}</p>' +
+	    '</article>' +
+	    '</section>',
 	methods: {
 	    getItem () {
 		console.log("get");
@@ -149,15 +151,19 @@ function PlaceItem () {
 
     };
 
-    item.template = '<article class="place">' +
-	'<h2 class="placeTitle">{{ item.name }}</h2><hr>' +
-	'<img class="placePhoto" :src="item.primary_image" :alt="item.name"/>' +
-	'<p class="placeDescription">{{ item.description }}</p>' +
-	'<hr><h4 v-if="item.plants.length" >Local Plants</h4><hr>' +
-	'<menu class="cityPlantList"><plant-element v-for="plant in item.plants" :key="plant.name" :plant="plant" @select="selectPlant"></plant-element></menu>' +
-	'<hr><h4 v-if="item.subplaces.length" >Subplaces</h4><hr>' +
-	'<menu class="cityPlaceList"><place-element v-for="place in item.subplaces" :key="place.name" :place="place" @select="selectPlace"></place-element></menu>' +
-	'</article>';
+    item.template = '<section class="elementView">' +
+	'<article>' +
+	'<h2>{{ item.name }}</h2><hr>' +
+	'<img :src="item.primary_image" :alt="item.name"/>' +
+	'<p>{{ item.description }}</p><hr>' +
+	'<section v-if="item.plants.length" class="subelementList">' +
+	'<h3>Local Plants</h3>' +
+	'<menu ><plant-element v-for="plant in item.plants" :key="plant.name" :plant="plant" @select="selectPlant"></plant-element></menu><hr></section>' +
+	'<section v-if="item.subplaces.length" class="subelementList">' +
+	'<h3>Subplaces</h3>' +
+	'<menu><place-element v-for="place in item.subplaces" :key="place.name" :place="place" @select="selectPlace"></place-element></menu></section>' +
+	'</article>' +
+	'</section>';
     return item;
 };
 

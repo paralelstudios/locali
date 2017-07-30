@@ -1,11 +1,10 @@
 <template>
-  <div id="quiz">
+  <section id="quiz">
     <quiz-entity :imageUrl="imageUrl"></quiz-entity>
-    <section id="control-panel">
-      <user-message v-if="userMessage" :message="userMessage"></user-message>
-      <user-message v-else-if="loading" :message="loadingMessage"></user-message>
-      <multiple-choice v-else :choices="choices" :correctChoice="name" @correct="setNewEntity"></multiple-choice>
-  </section></div>
+    <user-message v-if="userMessage" :message="userMessage"></user-message>
+    <user-message v-else-if="loading" :message="loadingMessage"></user-message>
+    <multiple-choice v-else :choices="choices" :correctChoice="name" @correct="setNewEntity"></multiple-choice>
+  </section>
 
 </template>
 
@@ -111,3 +110,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+#quiz {
+    align-content: space-around;
+}
+
+</style>

@@ -24,3 +24,42 @@ export default {
 }
 
 </script>
+
+<style scoped>
+#multiple-choice {
+    display: grid;
+    height: 100%;
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+#multiple-choice .choice {
+    transition: all .2s ease;
+}
+#multiple-choice .choice > span {
+    font-size: 5vw;
+    letter-spacing: 0.5vw;
+}
+
+
+#a.choice {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#b.choice {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#c.choice {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#d.choice {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+</style>

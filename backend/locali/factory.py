@@ -13,6 +13,7 @@ from .middleware import HTTPMethodOverrideMiddleware
 from flask_jwt import JWT
 from .services import users as _users
 
+
 def create_app(package_name, package_path, settings_override=None):
     app = Flask(package_name, instance_relative_config=True)
     app.config.from_object('locali.settings')

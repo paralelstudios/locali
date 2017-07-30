@@ -28,6 +28,7 @@ SECRET_KEY = os.environ.get('LOCALI_API_SECRET_KEY', 'secret-key-so-secret')
 BCRYPT_LOG_ROUNDS = 12
 JWT_AUTH_USERNAME_KEY = "email"
 JWT_EXPIRATION_DELTA = timedelta(1)
+JWT_AUTH_URL_RULE = "/api/auth"
 
 # AWS credentials
 AWS_ACCESS_KEY = None

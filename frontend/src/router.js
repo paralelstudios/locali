@@ -1,8 +1,13 @@
+import Vue from 'vue';
 import VueRouter from 'vue-router';
 import QuizService from "./components/QuizService.vue";
 import Menu from "./components/Menu.vue";
+import Info from "./components/Information.vue";
+import Login from "./components/Login.vue";
+import Profile from "./components/Profile.vue";
 import { Element, List, Item, PlaceItem } from "./helpers";
 
+Vue.use(VueRouter);
 
 const router = new VueRouter({
     mode: process.env.NODE_ENV === "production" ? 'history': '',
@@ -25,6 +30,15 @@ const router = new VueRouter({
 	{path: "/plants/:name",
 	 name: "plant",
 	 component: Item("plant", "/plants")},
+	{path: "/info",
+	 name: "info",
+	 component: Info},
+	{path: "/profile",
+	 name: "profile",
+	 component: Profile},
+	{path: "/login",
+	 name: "login",
+	 component: Login},
 	{path: "*", name: "menu", component: Menu},
     ]
 });
