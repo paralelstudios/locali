@@ -5,7 +5,9 @@ import Vue from 'vue'
 import axios from 'axios'
 import App from './App.vue'
 import config from './config'
+import VueImg from 'v-img';
 
+Vue.use(VueImg)
 Vue.prototype.$http = axios
 
 new Vue({ // eslint-disable-line no-new

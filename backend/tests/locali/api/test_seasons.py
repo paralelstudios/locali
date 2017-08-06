@@ -19,5 +19,8 @@ def test_season_get(client, sample_data):
     resp = client.get("/api/season")
     data = json.loads(resp.get_data())
     plants_in_season = plants.get_plants_in_season_query().all()
-    assert {x["name"] for x in data} == {x.primary_name for x in plants_in_season}
-    assert resp.status_code == 200
+    if plants_in_season:
+        assert {x["name"] for x in data} == {x.primary_name for x in plants_in_season}
+        assert resp.status_code == 200
+    else:
+        assert resp.status_code == 404

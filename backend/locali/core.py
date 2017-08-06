@@ -7,6 +7,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import abort
 from sqlalchemy.orm import load_only
+from boto3.session import Session
+from .helpers import try_committing
 
 
 class LocaliException(Exception):
@@ -49,7 +51,7 @@ class Service(object):
         """
         self._isinstance(model)
         db.session.add(model)
-        db.session.commit()
+        try_committing(db.session)
         return model
 
     def all(self):
@@ -96,13 +98,16 @@ class Service(object):
                       self.__model__.__tablename__))
         return instance
 
-    def first(self, **kwargs):
+    def first(self, with_for_update=False, **kwargs):
         """Returns the first instance found of the service's model filtered by
         the specified key word arguments.
 
         :param **kwargs: filter parameters
         """
-        return self.find(**kwargs).first()
+        q = self.find(**kwargs)
+        if with_for_update:
+            q = q.with_for_update()
+        return q.first()
 
     def get_or_404(self, id):
         """Returns an instance of the service's model with the specified id or
@@ -153,4 +158,20 @@ class Service(object):
         db.session.commit()
 
 
+class S3Client(object):
+    def __init__(self):
+        self._s3 = None
+
+    def init_app(self, app):
+        self._session = Session(
+            aws_access_key_id=app.config.get('AWS_ACCESS_KEY', None),
+            aws_secret_access_key=app.config.get('AWS_SECRET_KEY', None),
+            region_name=app.config['AWS_REGION'])
+        self._s3 = self._session.resource('s3')
+
+    def __getattr__(self, name):
+        return getattr(self._s3, name)
+
+
+s3 = S3Client()
 db = SQLAlchemy()

@@ -1,13 +1,15 @@
 <template>
   <section id="login">
-    <form class="login" @submit.prevent="submit">
+    <form @submit.prevent="submit">
       <user-message v-if="userMessage" :message="userMessage"></user-message>
-      <div :class="{loading: loading}">
+      <div :class="{spinning: loading}">
 	<div class="form-block">
-	  <input v-model.trim="email" class="field" name="email" type="email" placeholder="Email" required>
+	  <label for="email">Email</label>
+	  <input v-model.trim="email" class="field" name="email" type="email" placeholder="you@youremail.com" required>
 	</div>
 	<div class="form-block">
-	  <input v-model.trim="password" class="field" name="password" type="password" placeholder="Password" required>
+	  <label for="password">Password</label>
+	  <input v-model.trim="password" class="field" name="password" type="password" placeholder="*********" required>
 	</div>
 	<div class="form-block">
 	  <label>New User?<input v-model="newUser" type="checkbox" value="new-user"></label>
@@ -22,12 +24,15 @@
 
 <script>
 
-import UserMessage from "./UserMessage.vue"
 import store from "../store"
 import router from "../router"
+import UserMessage from "./UserMessage.vue"
 
 export default {
     name: "profile",
+    components: {
+	UserMessage
+    },
     data () {
 	return {
 	    userMessage: null,
@@ -36,9 +41,6 @@ export default {
 	    newUser: false,
 	    password: ''
 	}
-    },
-    components: {
-	UserMessage
     },
     beforeCreate () {
 	if (store.state.loggedIn) {
@@ -71,7 +73,6 @@ export default {
 
 	    }).catch(function (e) {
 		vm.loading = false
-		console.log("fail", e.response);
 		vm.userMessage = {text: "registration failed :( " + e.response.statusText,
 				  isError: true}
 		window.setTimeout(function () {
@@ -109,8 +110,8 @@ export default {
 </script>
 
 
-<style scoped lang="scss" type="text/scss">
-.loading {
+<style lang="scss" type="text/scss">
+.spinning {
     position: relative;
     transition-duration: .3s;
     > * {
@@ -141,7 +142,12 @@ export default {
     }
 }
 
-.login {
+
+section#login {
+    justify-content: center;
+}
+
+#login form{
     box-shadow: 0px 0px 15px -5px black;
     border-radius: 5px;
     background-color: #F1F8E9;
@@ -150,40 +156,10 @@ export default {
     align-items: center;
     padding: 2vh 2vw;
     flex-direction: column;
+    width: 100vw;
+    justify-content: center;
     width: 50vw;
 }
 
-input {
-    width: 30vw;
-    color: #33691E;
-    font-size: 2.5vh;
-}
-
-label {
-    color: #33691E;
-}
-button {
-    background-color: #43A047;
-    font-size: 4vh;
-    height: 6vh;
-    width: 100%;
-    border-radius: 5px;
-    transition: all 0.25s ease;
-}
-
-button:enabled:hover {
-    background-color: #2E7D32;
-}
-
-.form-block ~ .form-block {
-    margin-top: 3vh ;
-}
-.message {
-    margin: 3vw;
-    font-size: 4vh;
-}
-section {
-    justify-content: center;
-}
 
 </style>

@@ -7,8 +7,7 @@
 from flask_restful import Api
 from flask import Blueprint, request
 from flask_cors import CORS
-from .base import add_resource
-from ..helpers import SchemaEndpoint
+from .base import add_resource, SchemaEndpoint
 from ..services import users as _users
 
 bp = Blueprint('users', __name__, url_prefix='/api/users')

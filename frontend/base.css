@@ -80,7 +80,6 @@ header {
 }
 
 header * {
-    z-index: 100;
     background-color: #4CAF50;
     text-transform: lowercase;
 }
@@ -174,7 +173,7 @@ section#init > img {
     font-weight: 300;
     padding-top: 1vh;
 }
-.elementView {
+.elementView, .addPage {
     box-shadow: 0px 0px 15px -5px black;
     width: 95vw;
     height: 100vh;
@@ -202,13 +201,9 @@ section#init > img {
     font-weight: 300;
     padding-left: 2.5%;
 }
-.elementView > article > img {
-    max-width: 100%;
-    margin-left: 2.5%;
-    align-self: center;
-    height: 30vh;
-    margin-top: 2.5%;
-    margin-bottom: 2.5%;
+.image-gallery > img {
+    max-width: 95%;
+    max-height: 50vh;
     border-radius: 5px;
 }
 
@@ -239,3 +234,86 @@ section#init > img {
 .subelementList h4 {
     font-size: 4vh;
 }
+
+
+input {
+    width: 30vw;
+    color: #33691E;
+    font-size: 2.5vh;
+}
+
+label {
+    color: #33691E;
+}
+form button {
+    background-color: #43A047;
+    font-size: 4vh;
+    height: 6vh;
+    width: 100%;
+    border-radius: 5px;
+    color: #fff;
+    transition: all 0.25s ease;
+}
+
+form button:enabled:hover {
+    background-color: #2E7D32;
+}
+
+.form-block {
+    display: flex;
+    flex-direction: column;
+}
+.form-block ~ .form-block {
+    margin-top: 3vh ;
+}
+form .message {
+    margin: 3vw;
+    font-size: 4vh;
+}
+
+form label {
+    display: block;
+    color: #33691E;
+    text-transform: capitalize;
+}
+
+form textarea {
+    color: #33691E;
+}
+
+.addPage {
+    padding: 4vh 0;
+}
+
+.addPage textarea {
+    resize: none;
+    height: 25vh;
+    font-size: 2vh;
+}
+
+
+.form-block > label {
+    font-weight: 500;
+}
+
+label + * {
+    display: block;
+    margin-top: 1.5vh;
+}
+
+label > .primary {
+    font-size: 4vh;
+    display: block;
+    margin-bottom: 1vh;
+    color: #33691E;
+}
+
+div.image-gallery {
+    height: 50vh;
+    display: flex;
+    overflow: scroll;
+    margin: 0 2vw;
+}
+
+.addPage form {
+    width: 70vw;

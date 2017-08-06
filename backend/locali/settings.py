@@ -31,6 +31,9 @@ JWT_EXPIRATION_DELTA = timedelta(1)
 JWT_AUTH_URL_RULE = "/api/auth"
 
 # AWS credentials
-AWS_ACCESS_KEY = None
-AWS_SECRET_KEY = None
-AWS_REGION = 'us-east-1'
+AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY')
+AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY')
+AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
+
+# resource URIs
+LOCALI_PHOTO_UPLOAD_BUCKET = os.environ.get('LOCALI_PHOTO_UPLOAD_BUCKET', 'locali-resources-local')

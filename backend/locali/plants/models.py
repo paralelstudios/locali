@@ -5,33 +5,35 @@ matcheme.plants.models
 ~~~~~~~~
 
 """
+from uuid import uuid4
+from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy import ForeignKey
 from ..core import db
 from ..helpers import Dictable
-from sqlalchemy.dialects.postgresql import ARRAY
+
 
 plant_place_table = db.Table('plant_place',
-                             db.Column('plant_id', db.Integer,
+                             db.Column('plant_id', UUID,
                                        ForeignKey('plants.id')),
-                             db.Column('place_id', db.Integer,
+                             db.Column('place_id', UUID,
                                        ForeignKey('places.id')))
 
 
 class Plant(db.Model, Dictable):
     __tablename__ = 'plants'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(UUID, primary_key=True, default=lambda: str(uuid4()))
     primary_name = db.Column(db.String, unique=True, index=True, nullable=False)
-    scientific_name = db.Column(db.String)
-    image_urls = db.Column(ARRAY(db.String), nullable=False)
-    location_description = db.Column(db.String)
+    description = db.Column(db.String, nullable=False)
+    common_names = db.Column(ARRAY(db.String))
+    scientific_names = db.Column(ARRAY(db.String))
+    substrates = db.Column(ARRAY(db.String))
+    plant_type = db.Column(db.String)
+    seed_image_urls = db.Column(ARRAY(db.String))
+    flower_image_urls = db.Column(ARRAY(db.String))
+    leaf_image_urls = db.Column(ARRAY(db.String))
+    other_image_urls = db.Column(ARRAY(db.String))
+    uses = db.Column(ARRAY(db.String))
     places = db.relationship(
         "Place", secondary=plant_place_table,
         backref="plants")
-    season_description = db.Column(db.String)
     months_available = db.Column(ARRAY(db.Integer))
-    harvest_description = db.Column(db.String)
-    taste_description = db.Column(db.String)
-    smell_description = db.Column(db.String)
-    uses_description = db.Column(db.String)
-    prep_description = db.Column(db.String)
-    storage_description = db.Column(db.String)

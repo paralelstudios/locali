@@ -1,34 +1,24 @@
 <template>
   <menu id="profileMenu">
-    <li v-if="loggedIn"><router-link to="/profile"><button>profile</button></router-link></li>
-    <li v-if="loggedIn"><button @click="logout">logout</button></li>
-    <li v-if="!loggedIn"><router-link to="/login"><button>login</button></router-link></li>
+    <li v-if="$store.state.loggedIn"><router-link to="/profile"><button>profile</button></router-link></li>
+    <li v-if="$store.state.loggedIn"><button @click="logout">logout</button></li>
+    <li v-if="!$store.state.loggedIn"><router-link to="/login"><button>login/register</button></router-link></li>
   </menu>
 </template>
 
 <script>
 
-import store from "../store"
-import router from "../router"
-
 export default {
     name: "profile-menu",
-    computed: {
-	loggedIn () { return store.state.loggedIn; }
-    },
     methods: {
 	logout () {
-	    store.commit("LOGOUT")
-	    router.push("/menu")
+	    this.$store.commit("LOGOUT")
+	    this.$router.push("/menu")
 	},
 	ensureLogin () {
-	    if (!store.state.loggedIn) {
-		router.push("/login")
+	    if (!this.$store.state.loggedIn) {
+		this.$router.push("/login")
 	    }
-	},
-	click () {
-	    this.ensureLogin()
-	    this.menuIsOpen = !this.menuIsOpen
 	},
 	openMenu () {
 	    this.menuIsOpen = true;

@@ -11,7 +11,9 @@ services:
   backend:
     restart: always
     build: ./backend
-    env_file: db.env.secrets
+    env_file:
+      - db.env.secrets
+      - aws.env.secrets
     environment:
       - ENVIRONMENT=dev
       - POSTGRES_PORT_5432_TCP_ADDR=db

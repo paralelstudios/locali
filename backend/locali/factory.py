@@ -7,10 +7,10 @@
 import sys
 import logging
 from flask import Flask
-from .core import db
+from flask_jwt import JWT
+from .core import db, s3
 from .helpers import register_blueprints
 from .middleware import HTTPMethodOverrideMiddleware
-from flask_jwt import JWT
 from .services import users as _users
 
 
@@ -33,6 +33,7 @@ def create_app(package_name, package_path, settings_override=None):
 
     # component initiation
     db.init_app(app)
+    s3.init_app(app)
     jwt = JWT(app, _users.authenticate, _users.identity)  # noqa
 
     if not app.debug:

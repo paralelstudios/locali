@@ -5,6 +5,8 @@ import Menu from "./components/Menu.vue";
 import Info from "./components/Information.vue";
 import Login from "./components/Login.vue";
 import Profile from "./components/Profile.vue";
+import AddPlant from "./components/AddPlant.vue";
+import AddPlace from "./components/AddPlace.vue";
 import { Element, List, Item, PlaceItem } from "./helpers";
 
 Vue.use(VueRouter);
@@ -12,6 +14,9 @@ Vue.use(VueRouter);
 const router = new VueRouter({
     mode: process.env.NODE_ENV === "production" ? 'history': '',
     routes: [
+	{path: "/",
+	 name: "menu",
+	 component: Menu},
 	{path: "/season",
 	 name: "season",
 	 component: List("plants", "plant", "/season")},
@@ -39,7 +44,13 @@ const router = new VueRouter({
 	{path: "/login",
 	 name: "login",
 	 component: Login},
-	{path: "*", name: "menu", component: Menu},
+	{path: "/add/plant",
+	 name: "add-plant",
+	 component: AddPlant},
+	{path: "/add/place",
+	 name: "add-place",
+	 component: AddPlace},
+	{path: "*", redirect: '/'}
     ]
 });
 

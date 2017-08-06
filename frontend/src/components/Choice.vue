@@ -3,18 +3,19 @@
 </template>
 
 <script>
-    export default {
-	name: "choice",
-	props: ["label", "target"],
-	computed: {
-	    option () {
-		return this.label.trim().toLowerCase();
-	    }
-	},
-	methods: {
-	    submitChoice () { this.$emit("submit", this); }
+
+export default {
+    name: "choice",
+    props: ["label", "target"],
+    computed: {
+	option () {
+	    return this.label.trim().toLowerCase();
 	}
+    },
+    methods: {
+	submitChoice () { this.$emit("submit", this); }
     }
+}
 </script>
 
 <style scoped>

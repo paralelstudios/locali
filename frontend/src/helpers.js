@@ -1,4 +1,6 @@
 import UserMessage from "./components/UserMessage.vue";
+import AddButton from "./components/AddButton.vue";
+import router from "./router";
 
 function Element (element) {
     return {
@@ -33,16 +35,19 @@ function List(items, item, endpoint, parameter) {
 	},
 	components: {
 	    itemElement: Element(item),
-	    UserMessage
+	    UserMessage,
+	    AddButton
 	},
 	template: '<section class="elementList">' +
 	    '<user-message v-if="userMessage" :message="userMessage"></user-message>' +
 	    '<item-element v-else v-for="item in items" :key="item.name" :' + item + '="item" @select="select"><p>{{ item.description }} </p></item-element>' +
+	    '<add-button v-if="$store.state.loggedIn" @add="add"></add-button>' +
 	    '</section>',
 	created () {
 	    this.getItems();
 	},
 	methods: {
+	    add () { this.$router.push("/add/" + item); },
 	    select (selectedItem) {
 		this.$router.push(
 		    {name: item,
@@ -73,7 +78,7 @@ function Item (item, endpoint) {
 	data () {
 	    return {
 		userMessage: null,
-		item: {name: "",
+		item: {primary_name: "",
 			photo: "resources/imgs/paralel-logo.png",
 			description: ""}
 	    };
@@ -85,7 +90,7 @@ function Item (item, endpoint) {
 	template: '<section class="elementView">' +
 	    '<article>' +
 	    '<user-message v-if="userMessage" :message="userMessage"></user-message>' +
-	    '<h2>{{ item.name }}</h2><hr>' +
+	    '<h2>{{ item.primary_name }}</h2><hr>' +
 	    '<img :src="item.photo" :alt="item.name"/>' +
 	    '<p>{{ item.description }}</p>' +
 	    '</article>' +
@@ -115,7 +120,7 @@ function PlaceItem () {
     item.data = function () {
 	return {
 	    item: {name: "",
-		    primary_image: "",
+		    image_urls: "",
 		    description: "",
 		    subplaces: [
 			// {name: ""}
@@ -130,7 +135,7 @@ function PlaceItem () {
 	item.components["placeElement"] = Element("place");
     } else {
 	item.components = {plantElement: Element("plant"),
-			   placeElement: Element("place")};
+			   placeElement: Element("place")}
     }
     item.methods.selectPlant = function (plant) {
 	this.$router.push(
@@ -154,7 +159,9 @@ function PlaceItem () {
     item.template = '<section class="elementView">' +
 	'<article>' +
 	'<h2>{{ item.name }}</h2><hr>' +
-	'<img :src="item.primary_image" :alt="item.name"/>' +
+	'<div class="image-gallery">' +
+	'<img v-for="image in item.image_urls" v-img:group  :src="image" :alt="item.name"/>' +
+	'</div><hr>' +
 	'<p>{{ item.description }}</p><hr>' +
 	'<section v-if="item.plants.length" class="subelementList">' +
 	'<h3>Local Plants</h3>' +

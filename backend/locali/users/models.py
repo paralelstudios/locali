@@ -5,8 +5,8 @@
 
 """
 from uuid import uuid4
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import func
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask import current_app

@@ -10,9 +10,10 @@ from alembic.command import upgrade
 from alembic.config import Config
 from sqlalchemy.exc import ProgrammingError
 from locali.models import Plant, Place
+from locali.services import users
 from locali.core import db as _db
 from locali.api import create_app
-from ..helpers import TestFixtureException
+from ..helpers import TestFixtureException, jsonify_req
 from .. import settings
 
 
@@ -123,11 +124,9 @@ def sample_file(app, session, file_name, columns, key, model, create_func):
 @pytest.fixture()
 def sample_places(session, app):
     def make_place(model, row):
-        print("row superplace", row["superplace"])
         superplace = Place.query.filter_by(name=row["superplace"]).first()
-        print("superplace", superplace)
         m = model(name=row['name'], description=row['description'],
-                  primary_image=row["primary_image"],
+                  image_urls=[row["image_url"]],
                   superplace_id=superplace.id if superplace else None)
         session.add(m)
         session.commit()
@@ -135,7 +134,7 @@ def sample_places(session, app):
 
     sample_file(app, session,
                 "sample_places.csv",
-                ["name", "description", "superplace", "primary_image"],
+                ["name", "description", "superplace", "image_url"],
                 "name", Place,
                 make_place)
 
@@ -164,3 +163,21 @@ def sample_plants(session, app, sample_places):
 @pytest.fixture()
 def sample_data(sample_plants):
     pass
+
+
+@pytest.fixture()
+def user_data():
+    return dict(email="test@test.com", password="test")
+
+
+@pytest.fixture()
+def user(app, session, user_data):
+    return users.create(**user_data)
+
+
+@pytest.fixture()
+def auth_key(user, client, user_data):
+    data = jsonify_req(dict(email=user.email,
+                            password=user_data["password"]))
+    resp = client.post("/api/auth", **data)
+    return dict(Authorization="JWT {}".format(resp.json["access_token"]))

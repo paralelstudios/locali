@@ -12,7 +12,6 @@
 
 import QuizEntity from "./QuizEntity.vue";
 import MultipleChoice from "./MultipleChoice.vue";
-import UserMessage from "./UserMessage.vue";
 import config from "../config";
 import sampleSize from 'lodash.samplesize';
 import shuffle from 'lodash.shuffle';
@@ -36,7 +35,6 @@ export default {
     components: {
 	QuizEntity,
 	MultipleChoice,
-	UserMessage
     },
     created () { this.getItems(); },
     methods: {

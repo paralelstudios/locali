@@ -10,20 +10,11 @@
 
 <script>
 
-import store from "../store"
-import router from "../router"
+import RequireLogin from './mixins/RequireLogin.vue';
 
 export default {
     name: "profile",
-    beforeCreate () {
-        if (!store.state.loggedIn) {
-            router.push('/login')
-        }
-    },
-    data () {
-	return {
-	}
-    },
+    mixins: [RequireLogin]
 }
 
 </script>

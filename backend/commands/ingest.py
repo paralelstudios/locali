@@ -25,7 +25,7 @@ def post_plant(plant):
 def make_place(row):
     superplace = Place.query.filter_by(name=row["superplace"]).first()
     m = Place(name=row['name'], description=row['description'],
-              primary_image=row["primary_image"],
+              image_urls=[row["image_url"]],
               superplace_id=superplace.id if superplace else None)
     db.session.add(m)
     db.session.commit()
@@ -43,7 +43,7 @@ class Ingest(Command):
             "post": post_plant
         },
         'places': {
-            "cols": ["name", "description", "superplace", "primary_image"],
+            "cols": ["name", "description", "superplace", "image_url"],
             "key": "name",
             "class": Place,
             "make": make_place
