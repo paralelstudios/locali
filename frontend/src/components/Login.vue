@@ -26,7 +26,7 @@
 
 import store from "../store"
 import router from "../router"
-import UserMessage from "./UserMessage.vue"
+import UserMessage from "./base/UserMessage.vue"
 
 export default {
     name: "profile",

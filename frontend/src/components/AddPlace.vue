@@ -33,7 +33,7 @@
 import Multiselect from 'vue-multiselect'
 import PhotoDrop from './PhotoDrop.vue'
 import RequireLogin from './mixins/RequireLogin.vue'
-import UserMessage from "./UserMessage.vue"
+import UserMessage from "./base/UserMessage.vue"
 
 export default {
     name: "add-place",

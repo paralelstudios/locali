@@ -7,7 +7,10 @@ import Login from "./components/Login.vue";
 import Profile from "./components/Profile.vue";
 import AddPlant from "./components/AddPlant.vue";
 import AddPlace from "./components/AddPlace.vue";
-import { Element, List, Item, PlaceItem } from "./helpers";
+import PlaceList from "./components/PlaceList.vue";
+import List from "./components/base/List.vue";
+import PlaceItem from "./components/PlaceItem.vue";
+import PlantItem from "./components/PlantItem.vue";
 
 Vue.use(VueRouter);
 
@@ -19,22 +22,29 @@ const router = new VueRouter({
 	 component: Menu},
 	{path: "/season",
 	 name: "season",
-	 component: List("plants", "plant", "/season")},
+	 component: List,
+	 props: {name: "plants", endpoint: "/season",
+		 select_route: "plant"}},
 	{path: "/places",
 	 name: "places",
-	 component: List("places", "place", "/places")},
+	 component: List,
+	 props: {name: "places", endpoint: "/places",
+		 select_route: "place"}},
 	{path: "/practice",
 	 name: "practice",
 	 component: QuizService},
 	{path: "/plants",
 	 name: "plants",
-	 component: List("plants", "plant", "/plants")},
+	 component: List,
+	 props: {
+	     name: "plants", endpoint: "/plants",
+	     select_route: "plant"}},
 	{path: "/places/:name",
 	 name: "place",
-	 component: PlaceItem()},
+	 component: PlaceItem},
 	{path: "/plants/:name",
 	 name: "plant",
-	 component: Item("plant", "/plants")},
+	 component: PlantItem},
 	{path: "/info",
 	 name: "info",
 	 component: Info},
@@ -44,13 +54,13 @@ const router = new VueRouter({
 	{path: "/login",
 	 name: "login",
 	 component: Login},
-	{path: "/add/plant",
+	{path: "/add/plants",
 	 name: "add-plant",
 	 component: AddPlant},
-	{path: "/add/place",
+	{path: "/add/places",
 	 name: "add-place",
 	 component: AddPlace},
-	{path: "*", redirect: '/'}
+	{path: "*", redirect: "/"}
     ]
 });
 

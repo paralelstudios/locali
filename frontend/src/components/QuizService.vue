@@ -15,14 +15,17 @@ import MultipleChoice from "./MultipleChoice.vue";
 import config from "../config";
 import sampleSize from 'lodash.samplesize';
 import shuffle from 'lodash.shuffle';
+import UserMessage from "./base/UserMessage.vue";
 
 export default {
+    name: 'quiz',
     data () {
 	return {
  	    quiz: "plants",
 	    item: {},
 	    choices: [],
 	    solved: [],
+	    items: [],
 	    loading: false,
 	    loadingMessage: {text: "Loading..."},
 	    userMessage: null
@@ -35,6 +38,7 @@ export default {
     components: {
 	QuizEntity,
 	MultipleChoice,
+	UserMessage
     },
     created () { this.getItems(); },
     methods: {
@@ -100,7 +104,6 @@ export default {
 	    ).concat(
 		[this.item]
 	    );
-	    console.log("choices", choices)
 	    return choices.map(function (el) {
 		return {name: el["name"], target: el["name"], id: options.pop()};
 	    });

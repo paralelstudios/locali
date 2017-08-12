@@ -150,7 +150,9 @@ section#init > img {
     transition: all 0.5s ease;
     margin-top: 2vh;
 }
-
+.element:last-child {
+    margin-bottom: 2vh;
+}
 .element:hover {
     margin-top: 3vh;
     margin-bottom: 1vh;
@@ -176,7 +178,7 @@ section#init > img {
 .elementView, .addPage {
     box-shadow: 0px 0px 15px -5px black;
     width: 95vw;
-    height: 100vh;
+    height: 83vh;
     margin-top: 2vh;
     background-color: #F1F8E9;
     color: #33691E;
@@ -237,7 +239,7 @@ section#init > img {
 
 
 input {
-    width: 30vw;
+    min-width: 30vw;
     color: #33691E;
     font-size: 2.5vh;
 }
@@ -309,7 +311,7 @@ label > .primary {
 }
 
 div.image-gallery {
-    height: 50vh;
+    max-height: 50vh;
     display: flex;
     overflow: scroll;
     margin: 0 2vw;

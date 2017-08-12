@@ -162,8 +162,9 @@ class PlantEndpoint(Resource):
     def get(self, plant_name):
         plant = _plants.first_or_404(
             primary_name=plant_name.replace('_', ' '))
-
-        return plant.as_dict()
+        resp = plant.as_dict()
+        resp['places'] = [{"name": p.name} for p in plant.places]
+        return resp
 
 
 add_resource(api, PlantsListEndpoint)
