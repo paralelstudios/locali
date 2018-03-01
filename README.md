@@ -1,5 +1,5 @@
-# Matchme
-A platform for making photo identifaction games.
+# Locali
+A wiki platform for the documentation of locali flora
 
 ## Backend
 
